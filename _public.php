@@ -12,6 +12,14 @@ class rest extends dcUrlHandlers
 			self::p404();
 			return;
 		}
+		
+		//To do make headers optionals
+		header('Access-Control-Allow-Origin: *');
+		header('Access-Control-Allow-Methods: GET, POST'); 
+		header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+		
+		
+		
 		echo "HELLO".$_SERVER['REQUEST_METHOD'].$args;
 	}
 }	

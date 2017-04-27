@@ -1,0 +1,8 @@
+msgid "Enable REST API"
+msgstr "Activer l'API REST"
+
+msgid "Your API key"
+msgstr "Votre clef"
+
+msgid "Rest API configuration"
+msgstr "Configuration de l'API"

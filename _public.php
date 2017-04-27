@@ -13,10 +13,12 @@ class rest extends dcUrlHandlers
 			return;
 		}
 		
-		//To do make headers optionals
-		header('Access-Control-Allow-Origin: *');
-		header('Access-Control-Allow-Methods: GET, POST'); 
-		header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+		//coors headers
+		if($core->blog->settings->rest->rest_send_cors_headers){
+			header('Access-Control-Allow-Origin: *');
+			header('Access-Control-Allow-Methods: GET, POST'); 
+			header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+		}
 		
 		
 		

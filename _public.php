@@ -19,9 +19,18 @@ class rest extends dcUrlHandlers
 			header('Access-Control-Allow-Methods: GET, POST'); 
 			header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 		}
+		header('Content-Type: application/json');
 		
-		
-		
-		echo "HELLO".$_SERVER['REQUEST_METHOD'].$args;
+	
+	
+	
+	private function get_api_key_sended(){
+		$headers = getallheaders();
+		if(isset($headers['x_dc_key'])){
+			return $headers['x_dc_key'];
+		}else{
+			return false;
+		}
 	}
+	
 }	

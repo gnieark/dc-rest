@@ -1,7 +1,6 @@
 <?php
 
 if (!defined('DC_CONTEXT_ADMIN')) { return; }
-// dead but useful code, in order to have translations
 
 $_menu['Blog']->addItem(__('Rest API'),
 		'plugin.php?p=rest',

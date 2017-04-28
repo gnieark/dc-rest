@@ -17,6 +17,11 @@ paths:
   /blogs:
     get:
       summary: Get list of availables blogs
+      parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: false
       responses:
         200:
           description: array serving blogs properties
@@ -32,6 +37,10 @@ paths:
     post:
       summary: Create a new blog
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog
           in: body
           description: The blog you want to create
@@ -51,6 +60,10 @@ paths:
     get:
       summary: Get a blog poperties
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: false
         - name: blog-id
           in: path
           type: string
@@ -69,6 +82,10 @@ paths:
     patch:
       summary: Update part of blog properties
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -93,6 +110,10 @@ paths:
     put:
       summary: Overwrite blog Properties (if a parameter is not set, his value will be erased by de default value)
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -118,6 +139,10 @@ paths:
     delete:
       summary: Delete this blog
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -138,6 +163,10 @@ paths:
     get:
       summary: Get list of posts
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -172,6 +201,10 @@ paths:
     post:
       summary: Create a new post
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -195,6 +228,10 @@ paths:
     get:
       summary: Get a post entry
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: false
         - name: blog-id
           in: path
           type: string
@@ -229,6 +266,10 @@ paths:
     patch:
       summary: Update part of a post entry's properties
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -255,6 +296,10 @@ paths:
     put:
       summary: Update full blog properties. Unsetted parameters will be erased
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -281,6 +326,10 @@ paths:
     delete:
       summary: Delete the post
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -304,6 +353,10 @@ paths:
     get:
       summary: Get list of available categories
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: false
         - name: blog-id
           in: path
           type: string
@@ -323,6 +376,10 @@ paths:
     post:
       summary: Create a new category
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
         - name: blog-id
           in: path
           type: string
@@ -346,6 +403,10 @@ paths:
     get:
       summary: get one category properties
       parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: false
         - name: blog-id
           in: path
           type: string

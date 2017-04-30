@@ -1,7 +1,7 @@
 <?php
 if (!defined('DC_RC_PATH')) { return; }
 
-$core->url->register('rest','rest','^rest(?:/(.+))?$',array('rest','getResponse'));
+$core->url->register('rest','rest','^rest(?:/(.*))?$',array('rest','getResponse'));
 class rest extends dcUrlHandlers
 {
 	public static function getResponse($args)
@@ -16,16 +16,33 @@ class rest extends dcUrlHandlers
 		//coors headers
 		if($core->blog->settings->rest->rest_send_cors_headers){
 			header('Access-Control-Allow-Origin: *');
-			header('Access-Control-Allow-Methods: GET, POST'); 
-			header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+			header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE'); 
+			header('Access-Control-Allow-Headers: Content-Type, authorization, x_dc_key');
 		}
 		header('Content-Type: application/json');
 		
+		$apiKey = rest::get_api_key_sended();
 	
-	
-	
+		if($apiKey){
+			$user = new restAuth($core);
+			;
+			
+			
+			//test:
+			if($user->checkUser('','',$apiKey) === false){
+				error_log("wrong key");
+				
+			}else{
+				error_log($user->userID());
+			}
+			
+		
+		
+		}
+	}
 	private function get_api_key_sended(){
-		$headers = getallheaders();
+		//to do: test it on nginx
+		$headers = apache_request_headers();
 		if(isset($headers['x_dc_key'])){
 			return $headers['x_dc_key'];
 		}else{

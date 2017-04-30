@@ -4,13 +4,13 @@ info:
   description: Manage your(s) blogs with this API
   version: "0.0.1"
 # the domain of the service
-host: your.blog.com
+host: dotclear.localhost
 # array of all schemes that your API supports
 schemes:
-  - https
+  - http
 # will be prefixed to all paths
 # (part of plugin url)
-basePath: /rest
+basePath: /dotclear/index.php?rest/
 produces:
   - application/json
 paths:
@@ -20,8 +20,8 @@ paths:
       parameters:
         - name: x_dc_key
           in: header
-          type: string
           required: false
+          type: string
       responses:
         200:
           description: array serving blogs properties

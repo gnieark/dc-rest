@@ -5,11 +5,16 @@ class RestQuery{
 	public $response_message; //array
 	private $queryObj;
 	
-	public function __construct($httpMethod,$params){
+	public function __construct($httpMethod,$args,$apiKey = ''){
 	
 		//définir la methode API (pas HTML) appelée
 		switch($httpMethod){
 			case "get":
+				if($args='blogs'){
+					
+				
+				}
+			
 			
 				break;
 			case "post":
@@ -106,14 +111,6 @@ class RestQuery{
 	
 	}
 
-
-}
-class QueryGetBlogs extends RestQuery
-{
-
-}
-class QueryPostBlogs extends RestQuery
-{
 
 }
 

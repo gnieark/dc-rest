@@ -2,7 +2,7 @@
 
 if (!defined('DC_CONTEXT_ADMIN')) { return; }
 
-require_once(dirname(__FILE__).'/inc/class.rest.key.php');
+
 $apiKey = new ApiKey;
 
 // Setting default parameters if missing configuration

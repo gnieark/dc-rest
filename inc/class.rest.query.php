@@ -5,44 +5,49 @@ class RestQuery{
 	public $response_message; //array
 	private $queryObj;
 	
-	public function __construct($httpMethod,$args,$apiKey = ''){
-	
+	public function __construct($httpMethod,$args,$user){
+		error_log($httpMethod." ".$args);
 		//définir la methode API (pas HTML) appelée
 		switch($httpMethod){
-			case "get":
-				if($args='blogs'){
-					
-				
+			case "GET":
+				if($args == 'blogs'){
+					$queryObj = new RestQueryGetBlogs($user);
+					break;
+				}elseif($args == 'specs'){
+                                        $queryObj = new RestQueryGetSpecs($user);
+					break;
 				}
-			
+				break;
+			case "POST":
 			
 				break;
-			case "post":
-			
-				break;
-			case "put":
+			case "PUT":
 			
 				break;
 				
-			case "patch":
+			case "PATCH":
 			
 				break;
 				
-			case "delete":
+			case "DELETE":
 			
 				break;
 			default:
 				$this->response_code = RestQuery::get_full_code_header(400);
 				$this->response_message = array(
-					"error":"Unrecoknized method",
-					"code":400
+					"error"	=> "Unrecoknized method",
+					"code"	=> 400
 				);
+				return;
 				break;
 		}
+		
+		$this->response_code = $queryObj->response_code;
+		$this->response_message = $queryObj->response_message;
 	
 	}
 
-		public function get_full_code_header($code){
+	public function get_full_code_header($code){
 		static $codes = array(
 			100 =>"Continue",
 			101 =>"Switching Protocols",

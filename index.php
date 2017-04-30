@@ -59,6 +59,8 @@ if(!empty($_POST['resetApiKey'])){
 	<title>Rest API config</title>
 </head>
 <body>
+	<h2>Documentation</h2>
+            <p><a href="<?php echo $core->blog->url."rest/documentation"; ?>">Go to the Swagger documentation</a></p>
 	<h2><?php echo __('Your API key');?></h2>
 	<?php echo $apiKey-> get_dc_admin_form($core->auth->userID()); ?>
 
@@ -66,7 +68,6 @@ if(!empty($_POST['resetApiKey'])){
 //Seulement si administrateur:
 if($core->auth->isSuperAdmin()): 
 ?>
-	
 	<h2><?php echo __('Rest API configuration'); ?></h2>
 		<form method="post" action="<?php http::getSelfURI(); ?>">
 		<p>

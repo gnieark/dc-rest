@@ -1,0 +1,1208 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Dotclear API",
+    "description": "Manage your(s) blogs with this API",
+    "version": "0.0.1"
+  },
+  "host": "dotclear.localhost",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/dotclear/index.php?rest/",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/blogs": {
+      "get": {
+        "summary": "Get list of availables blogs",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array serving blogs properties",
+            "schema": {
+              "title": "blogs",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/blog"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new blog",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog",
+            "in": "body",
+            "description": "The blog you want to create",
+            "schema": {
+              "$ref": "#/definitions/blog"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the new blog's identifiant",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/blogs/{blog-id}": {
+      "get": {
+        "summary": "Get a blog poperties",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing blog properties. This list of attributes is not exhaustive.",
+            "schema": {
+              "$ref": "#/definitions/blogProperties"
+            }
+          },
+          "404": {
+            "description": "this blog id does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update part of blog properties",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog",
+            "in": "body",
+            "description": "This list of parameters is not exhaustive",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/blogProperties"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the edited blog's identifiant",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "404": {
+            "description": "this blog id does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Overwrite blog Properties (if a parameter is not set, his value will be erased by de default value)",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog",
+            "in": "body",
+            "description": "This list of parameters is not exhaustive",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/blogProperties"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the edited blog's identifiant",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "404": {
+            "description": "this blog id does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete this blog",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the deleted blog's identifiant",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "404": {
+            "description": "this blog id does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/posts": {
+      "get": {
+        "summary": "Get list of posts",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "sql like filters",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Fields you want to get. If unset, fields are post_id, post_url, post_status, post_title, post_date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of posts",
+            "schema": {
+              "title": "posts",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/dc_post"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new post",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "properties",
+            "in": "body",
+            "description": "Some non required fields you don't define will be set (default value) by the API",
+            "schema": {
+              "$ref": "#/definitions/new_dc_post"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Id of newly created post",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/posts/{post-id}": {
+      "get": {
+        "summary": "Get a post entry",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "sql like filters",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Fields you want to get. If unset, all available fields will be get."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The post values",
+            "schema": {
+              "$ref": "#/definitions/dc_post"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update part of a post entry's properties",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "properties",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/dc_post"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the updated post's id",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "404": {
+            "description": "this post does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update full blog properties. Unsetted parameters will be erased",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "properties",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/new_dc_post"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the updated post's id",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "404": {
+            "description": "this post does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the post",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the deleted post's id",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "404": {
+            "description": "this post does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/categories": {
+      "get": {
+        "summary": "Get list of available categories",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the categories properties",
+            "schema": {
+              "title": "categories",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/category"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new category",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "properties",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/new_category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the created category id",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/categories/{cat-id}": {
+      "get": {
+        "summary": "get one category properties",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "cat-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the created category properties",
+            "schema": {
+              "$ref": "#/definitions/category"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update some attributes",
+        "parameters": [
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "cat-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "category",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the modified category id",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "blog": {
+      "type": "object",
+      "required": [
+        "blog_id",
+        "blog_name",
+        "blog_url"
+      ],
+      "properties": {
+        "blog_id": {
+          "type": "string"
+        },
+        "blog_name": {
+          "type": "string"
+        },
+        "blog_url": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "blog_status": {
+          "type": "string",
+          "enum": [
+            "En ligne",
+            "Hors ligne",
+            "Retiré"
+          ]
+        },
+        "url_scan": {
+          "type": "string",
+          "enum": [
+            "query_string",
+            "path_info"
+          ]
+        }
+      }
+    },
+    "Ids": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "New blog id"
+        }
+      }
+    },
+    "blogProperties": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "allow_comments": {
+          "type": "boolean"
+        },
+        "allow_trackbacks": {
+          "type": "boolean"
+        },
+        "blog_timezone": {
+          "type": "string"
+        },
+        "comment_preview_optional": {
+          "type": "string"
+        },
+        "comments_nofollow": {
+          "type": "boolean"
+        },
+        "comments_pub": {
+          "type": "boolean"
+        },
+        "comments_ttl": {
+          "type": "integer"
+        },
+        "copyright_notice": {
+          "type": "string"
+        },
+        "csp_admin_default": {
+          "type": "string"
+        },
+        "csp_admin_img": {
+          "type": "string"
+        },
+        "csp_admin_on": {
+          "type": "boolean"
+        },
+        "csp_admin_report_only": {
+          "type": "boolean"
+        },
+        "csp_admin_script": {
+          "type": "string"
+        },
+        "csp_admin_style": {
+          "type": "string"
+        },
+        "date_format": {
+          "type": "string"
+        },
+        "date_formats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "editor": {
+          "type": "string"
+        },
+        "enable_html_filter": {
+          "type": "boolean"
+        },
+        "enable_xmlrpc": {
+          "type": "boolean"
+        },
+        "import_feed_ip_regexp": {
+          "type": "string"
+        },
+        "import_feed_no_private_ip": {
+          "type": "boolean"
+        },
+        "import_feed_port_regexp": {
+          "type": "string"
+        },
+        "import_feed_url_control": {
+          "type": "boolean"
+        },
+        "inc_subcats": {
+          "type": "boolean"
+        },
+        "jquery_migrate_mute": {
+          "type": "boolean"
+        },
+        "jquery_version": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        },
+        "media_exclusion": {
+          "type": "string"
+        },
+        "media_flash_fallback": {
+          "type": "boolean"
+        },
+        "media_img_default_alignment": {
+          "type": "string"
+        },
+        "media_img_default_legend": {
+          "type": "string"
+        },
+        "media_img_default_link": {
+          "type": "string"
+        },
+        "media_img_default_size": {
+          "type": "string"
+        },
+        "media_img_m_size": {
+          "type": "integer"
+        },
+        "media_img_no_date_alone": {
+          "type": "string"
+        },
+        "media_img_s_size": {
+          "type": "integer"
+        },
+        "media_img_t_size": {
+          "type": "integer"
+        },
+        "media_img_title_pattern": {
+          "type": "string"
+        },
+        "media_img_use_dto_first": {
+          "type": "string"
+        },
+        "media_video_height": {
+          "type": "integer"
+        },
+        "media_video_width": {
+          "type": "integer"
+        },
+        "nb_comment_per_feed": {
+          "type": "integer"
+        },
+        "nb_post_for_home": {
+          "type": "integer"
+        },
+        "nb_post_per_feed": {
+          "type": "integer"
+        },
+        "nb_post_per_page": {
+          "type": "integer"
+        },
+        "no_search": {
+          "type": "boolean"
+        },
+        "note_title_tag": {
+          "type": "string"
+        },
+        "post_url_format": {
+          "type": "string"
+        },
+        "prevents_clickjacking": {
+          "type": "string"
+        },
+        "public_path": {
+          "type": "string"
+        },
+        "public_url": {
+          "type": "string"
+        },
+        "robots_policy": {
+          "type": "string"
+        },
+        "short_feed_items": {
+          "type": "boolean"
+        },
+        "simpleMenu": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "simpleMenu_active": {
+          "type": "boolean"
+        },
+        "store_plugin_url": {
+          "type": "string"
+        },
+        "store_theme_url": {
+          "type": "string"
+        },
+        "theme": {
+          "type": "string"
+        },
+        "themes_path": {
+          "type": "string"
+        },
+        "themes_url": {
+          "type": "string"
+        },
+        "time_format": {
+          "type": "string"
+        },
+        "time_formats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tpl_allow_php": {
+          "type": "boolean"
+        },
+        "tpl_use_cache": {
+          "type": "boolean"
+        },
+        "trackbacks_pub": {
+          "type": "boolean"
+        },
+        "trackbacks_ttl": {
+          "type": "integer"
+        },
+        "url_scan": {
+          "type": "string"
+        },
+        "use_smilies": {
+          "type": "boolean"
+        },
+        "wiki_comments": {
+          "type": "boolean"
+        }
+      }
+    },
+    "new_dc_post": {
+      "type": "object",
+      "required": [
+        "post_content",
+        "post_title"
+      ],
+      "properties": {
+        "cat_id": {
+          "type": "string"
+        },
+        "post_dt": {
+          "type": "string"
+        },
+        "post_tz": {
+          "type": "string"
+        },
+        "post_creadt": {
+          "type": "string"
+        },
+        "post_upddt": {
+          "type": "string"
+        },
+        "post_password": {
+          "type": "string"
+        },
+        "post_type": {
+          "type": "string"
+        },
+        "post_format": {
+          "type": "string"
+        },
+        "post_url": {
+          "type": "string"
+        },
+        "post_lang": {
+          "type": "string"
+        },
+        "post_title": {
+          "type": "string"
+        },
+        "post_excerpt": {
+          "type": "string"
+        },
+        "post_excerpt_xhtml": {
+          "type": "string"
+        },
+        "post_content": {
+          "type": "string"
+        },
+        "post_content_xhtml": {
+          "type": "string"
+        },
+        "post_notes": {
+          "type": "string"
+        },
+        "post_meta": {
+          "type": "string"
+        },
+        "post_words": {
+          "type": "string"
+        },
+        "post_status": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Scheduled",
+            "Unpublished",
+            "Published"
+          ]
+        },
+        "post_selected": {
+          "type": "boolean"
+        },
+        "post_position": {
+          "type": "string"
+        },
+        "post_open_comment": {
+          "type": "boolean"
+        },
+        "post_open_tb": {
+          "type": "boolean"
+        }
+      }
+    },
+    "dc_post": {
+      "type": "object",
+      "properties": {
+        "post_id": {
+          "type": "string"
+        },
+        "blog_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "cat_id": {
+          "type": "string"
+        },
+        "post_dt": {
+          "type": "string"
+        },
+        "post_tz": {
+          "type": "string"
+        },
+        "post_creadt": {
+          "type": "string"
+        },
+        "post_upddt": {
+          "type": "string"
+        },
+        "post_password": {
+          "type": "string"
+        },
+        "post_type": {
+          "type": "string"
+        },
+        "post_format": {
+          "type": "string"
+        },
+        "post_url": {
+          "type": "string"
+        },
+        "post_lang": {
+          "type": "string"
+        },
+        "post_title": {
+          "type": "string"
+        },
+        "post_excerpt": {
+          "type": "string"
+        },
+        "post_excerpt_xhtml": {
+          "type": "string"
+        },
+        "post_content": {
+          "type": "string"
+        },
+        "post_content_xhtml": {
+          "type": "string"
+        },
+        "post_notes": {
+          "type": "string"
+        },
+        "post_meta": {
+          "type": "string"
+        },
+        "post_words": {
+          "type": "string"
+        },
+        "post_status": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Scheduled",
+            "Unpublished",
+            "Published"
+          ]
+        },
+        "post_selected": {
+          "type": "boolean"
+        },
+        "post_position": {
+          "type": "string"
+        },
+        "post_open_comment": {
+          "type": "boolean"
+        },
+        "post_open_tb": {
+          "type": "boolean"
+        },
+        "nb_comment": {
+          "type": "integer"
+        },
+        "nb_trackback": {
+          "type": "integer"
+        },
+        "post_firstpub": {
+          "type": "string"
+        }
+      }
+    },
+    "category": {
+      "type": "object",
+      "properties": {
+        "cat_id": {
+          "type": "integer"
+        },
+        "cat_title": {
+          "type": "string"
+        },
+        "cat_url": {
+          "type": "string"
+        },
+        "cat_desc": {
+          "type": "string"
+        },
+        "cat_position": {
+          "type": "integer"
+        },
+        "temporary": {
+          "type": "boolean"
+        }
+      }
+    },
+    "new_category": {
+      "type": "object",
+      "required": [
+        "cat_title"
+      ],
+      "properties": {
+        "cat_title": {
+          "type": "string"
+        },
+        "cat_url": {
+          "type": "string"
+        },
+        "cat_desc": {
+          "type": "string"
+        },
+        "cat_position": {
+          "type": "integer"
+        },
+        "temporary": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

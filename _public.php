@@ -12,7 +12,15 @@ class rest extends dcUrlHandlers
 			self::p404();
 			return;
 		}
+		error_log($args);
 		
+		//exception pour la documentation
+		if($args == "documentation"){
+                        include (dirname(__FILE__).'/documentation/swagger-ui-dist/index.php');
+                        return;
+		}
+		
+            
 		//coors headers
 		if($core->blog->settings->rest->rest_send_cors_headers){
 			header('Access-Control-Allow-Origin: *');
@@ -21,26 +29,29 @@ class rest extends dcUrlHandlers
 		}
 		header('Content-Type: application/json');
 		
+		//user authentification (facultative at this step)
 		$apiKey = rest::get_api_key_sended();
-	
+		$user = false;
 		if($apiKey){
 			$user = new restAuth($core);
-			;
-			
-			
-			//test:
 			if($user->checkUser('','',$apiKey) === false){
-				error_log("wrong key");
-				
-			}else{
-				error_log($user->userID());
+				header(RestQuery::get_full_code_header(403));
+				echo json_encode(array(
+					"error" => "Wrong API Key",
+					"code"	=> 403
+				));
+				return;
 			}
-			
-		
-		
 		}
+		
+		$r = new RestQuery($_SERVER['REQUEST_METHOD'],$args,$user);
+		header($r->response_code);
+		echo json_encode($r->response_message);		
+		
 	}
-	private function get_api_key_sended(){
+	
+	private function get_api_key_sended()
+	{
 		//to do: test it on nginx
 		$headers = apache_request_headers();
 		if(isset($headers['x_dc_key'])){

@@ -61,7 +61,6 @@ class restAuth extends dcAuth
 			return false;
 		}
 		
-
 		$this->user_id = $rs->user_id;
 		$this->user_change_pwd = (boolean) $rs->user_change_pwd;
 		$this->user_admin = (boolean) $rs->user_super;

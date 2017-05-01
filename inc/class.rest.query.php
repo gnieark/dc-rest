@@ -3,49 +3,6 @@
 class RestQuery{
 	public $response_code;
 	public $response_message; //array
-	private $queryObj;
-	
-	public function __construct($httpMethod,$args,$user){
-		error_log($httpMethod." ".$args);
-		//définir la methode API (pas HTML) appelée
-		switch($httpMethod){
-			case "GET":
-				if($args == 'blogs'){
-					$queryObj = new RestQueryGetBlogs($user);
-					break;
-				}elseif($args == 'specs'){
-                                        $queryObj = new RestQueryGetSpecs($user);
-					break;
-				}
-				break;
-			case "POST":
-			
-				break;
-			case "PUT":
-			
-				break;
-				
-			case "PATCH":
-			
-				break;
-				
-			case "DELETE":
-			
-				break;
-			default:
-				$this->response_code = RestQuery::get_full_code_header(400);
-				$this->response_message = array(
-					"error"	=> "Unrecoknized method",
-					"code"	=> 400
-				);
-				return;
-				break;
-		}
-		
-		$this->response_code = $queryObj->response_code;
-		$this->response_message = $queryObj->response_message;
-	
-	}
 
 	public function get_full_code_header($code){
 		static $codes = array(
@@ -111,12 +68,5 @@ class RestQuery{
 		}else{
 			return "HTTP/1.0 ".$code." Something wrong happened";
 		}
-		
-	
-	
 	}
-
-
 }
-
-//etc...

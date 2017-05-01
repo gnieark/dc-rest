@@ -1,10 +1,6 @@
 <?php
-class RestQueryGetSpecs
+class RestQueryGetSpecs extends RestQuery
 {
-
-	public $response_code;
-	public $response_message; //array
-	
 	public function __construct($user){
             global $core;
             $this->response_code = 200;

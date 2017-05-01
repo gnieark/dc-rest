@@ -4,6 +4,56 @@ if (!defined('DC_RC_PATH')) { return; }
 $core->url->register('rest','rest','^rest(?:/(.*))?$',array('rest','getResponse'));
 class rest extends dcUrlHandlers
 {
+
+	/**
+	* Create the "good" RestQuery instance
+	* Input: $httpMethod: String (POST/GET/PATCH etc...)
+	* $args Url arguments
+	* $user dcAuth object
+	* $body Body of the input query. String
+	* Output: object RestQuery
+	*/
+	private function restFactoryQuery($httpMethod,$args,$user,$body){
+	
+		//définir la methode API (pas HTML) appelée
+		switch($httpMethod){
+			case "GET":
+				if($args == 'blogs'){
+					$queryObj = new RestQueryGetBlogs($user);
+					break;
+				}elseif($args == 'specs'){
+					$queryObj = new RestQueryGetSpecs($user);
+					break;
+				}
+				break;
+			case "POST":
+			
+				break;
+			case "PUT":
+			
+				break;
+				
+			case "PATCH":
+			
+				break;
+				
+			case "DELETE":
+			
+				break;
+			default:
+				$this->response_code = RestQuery::get_full_code_header(400);
+				$this->response_message = array(
+					"error"	=> "Unrecoknized method",
+					"code"	=> 400
+				);
+				return;
+				break;
+		}
+		
+		return $queryObj;
+	
+	}
+
 	public static function getResponse($args)
 	{
 		global $core;
@@ -44,7 +94,7 @@ class rest extends dcUrlHandlers
 			}
 		}
 		
-		$r = new RestQuery($_SERVER['REQUEST_METHOD'],$args,$user);
+		$r = rest::restFactoryQuery($_SERVER['REQUEST_METHOD'],$args,$user,file_get_contents('php://input'));
 		header($r->response_code);
 		echo json_encode($r->response_message);		
 		

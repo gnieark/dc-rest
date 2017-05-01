@@ -1,10 +1,7 @@
 <?php
 
-class RestQueryGetBlogs
+class RestQueryGetBlogs extends RestQuery
 {
-	public $response_code;
-	public $response_message; //array
-	
 	public function __construct($user){
 		if($user === false){
 			//need To be authentified

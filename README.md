@@ -2,12 +2,9 @@
 
 Plugin dotclear ouvrant une API REST/JSON
 
-Interface d'administration commencée
+C'est en cours de développement et est loin d'être fini.
 
-Dégrossi les specs / documentation de l'API (swagger).
-Elles seront modifiées au fur et à mesure du développement de l'API. 
-Pour le moment les specifications Swagger sont basées sur la structure de la base de données.
+
+Les spécifications swagger seront modifiées au fur et à mesure du développement de l'API. 
+Pour le moment elles sont basées sur la structure de la base de données et ne sont pas exhaustives.
 A terme, elles seront basées plus sur les fonctions de dotclear.
-
-
-PS: Des que l'architecture de ce plugin sera plus développée, je poursuivrai son dev sur Bitbucket.

@@ -12,12 +12,12 @@
 if (!defined('DC_RC_PATH')) { return; }
 
 $this->registerModule(
-	/* Name */					"rest",
-	/* Description*/		"A JSON/REST API for Dotclear",
-	/* Author */				"Gnieark (hope some others contributors)",
-	/* Version */				'0.0.1',
-	array(
-		'permissions' =>	'usage,contentadmin',
-		'type'		=>		'plugin',
-	)
+  /* Name */          "rest",
+  /* Description*/    "A JSON/REST API for Dotclear",
+  /* Author */        "Gnieark (hope some others contributors)",
+  /* Version */        '0.0.1',
+  array(
+    'permissions' =>  'usage,contentadmin',
+    'type'    =>    'plugin',
+  )
 );

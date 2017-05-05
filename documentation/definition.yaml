@@ -2,18 +2,27 @@ swagger: '2.0'
 info:
   title: Dotclear API
   description: Manage your(s) blogs with this API
-  version: "0.0.1"
-# the domain of the service
+  version: 0.0.1
 host: dotclear.localhost
-# array of all schemes that your API supports
 schemes:
   - http
-# will be prefixed to all paths
-# (part of plugin url)
-basePath: /dotclear/index.php?rest/
+basePath: /dotclear/index.php?rest
 produces:
   - application/json
 paths:
+  /specs:
+    get:
+      summary: Get this API SWAGGER documentation
+      responses:
+        '200':
+          description: swagger.json
+          schema:
+            title: doc
+            type: string
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /blogs:
     get:
       summary: Get list of availables blogs
@@ -23,13 +32,12 @@ paths:
           required: false
           type: string
       responses:
-        200:
+        '200':
           description: array serving blogs properties
           schema:
-            title: blogs
             type: array
             items:
-              $ref: '#/definitions/blog'
+              type: string
         default:
           description: Unexpected error
           schema:
@@ -48,7 +56,7 @@ paths:
             $ref: '#/definitions/blog'
           required: true
       responses:
-        200:
+        '200':
           description: array containing the new blog's identifiant
           schema:
             $ref: '#/definitions/Ids'
@@ -56,7 +64,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /blogs/{blog-id}:
+  '/blogs/{blog-id}':
     get:
       summary: Get a blog poperties
       parameters:
@@ -69,11 +77,13 @@ paths:
           type: string
           required: true
       responses:
-        200:
-          description: array containing blog properties. This list of attributes is not exhaustive.
+        '200':
+          description: >-
+            array containing blog properties. This list of attributes is not
+            exhaustive.
           schema:
             $ref: '#/definitions/blogProperties'
-        404:
+        '404':
           description: this blog id does not exists
         default:
           description: Unexpected error
@@ -97,18 +107,20 @@ paths:
           schema:
             $ref: '#/definitions/blogProperties'
       responses:
-        200:
+        '200':
           description: array containing the edited blog's identifiant
           schema:
             $ref: '#/definitions/Ids'
-        404:
+        '404':
           description: this blog id does not exists
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
     put:
-      summary: Overwrite blog Properties (if a parameter is not set, his value will be erased by de default value)
+      summary: >-
+        Overwrite blog Properties (if a parameter is not set, his value will be
+        erased by de default value)
       parameters:
         - name: x_dc_key
           in: header
@@ -125,17 +137,16 @@ paths:
           schema:
             $ref: '#/definitions/blogProperties'
       responses:
-        200:
+        '200':
           description: array containing the edited blog's identifiant
           schema:
             $ref: '#/definitions/Ids'
-        404:
+        '404':
           description: this blog id does not exists
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-            
     delete:
       summary: Delete this blog
       parameters:
@@ -148,18 +159,17 @@ paths:
           type: string
           required: true
       responses:
-        200:
+        '200':
           description: array containing the deleted blog's identifiant
           schema:
             $ref: '#/definitions/Ids'
-        404:
+        '404':
           description: this blog id does not exists
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-    
-  /{blog-id}/posts:
+  '/{blog-id}/posts':
     get:
       summary: Get list of posts
       parameters:
@@ -184,16 +194,17 @@ paths:
           items:
             type: string
           required: false
-          description: Fields you want to get. If unset, fields are post_id, post_url, post_status, post_title, post_date
+          description: >-
+            Fields you want to get. If unset, fields are post_id, post_url,
+            post_status, post_title, post_date
       responses:
-        200:
+        '200':
           description: list of posts
           schema:
             title: posts
             type: array
             items:
               $ref: '#/definitions/dc_post'
-            
         default:
           description: Unexpected error
           schema:
@@ -211,11 +222,13 @@ paths:
           required: true
         - name: properties
           in: body
-          description: Some non required fields you don't define will be set (default value) by the API
+          description: >-
+            Some non required fields you don't define will be set (default
+            value) by the API
           schema:
             $ref: '#/definitions/new_dc_post'
       responses:
-        200:
+        '200':
           description: Id of newly created post
           schema:
             $ref: '#/definitions/Ids'
@@ -223,8 +236,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-            
-  /{blog-id}/posts/{post-id}:
+  '/{blog-id}/posts/{post-id}':
     get:
       summary: Get a post entry
       parameters:
@@ -253,11 +265,11 @@ paths:
           items:
             type: string
           required: false
-          description: Fields you want to get. If unset, all available fields will be get.
+          description: 'Fields you want to get. If unset, all available fields will be get.'
       responses:
-        200:
+        '200':
           description: The post values
-          schema: 
+          schema:
             $ref: '#/definitions/dc_post'
         default:
           description: Unexpected error
@@ -283,16 +295,16 @@ paths:
           schema:
             $ref: '#/definitions/dc_post'
       responses:
-        200:
+        '200':
           description: array containing the updated post's id
           schema:
             $ref: '#/definitions/Ids'
-        404:
+        '404':
           description: this post does not exists
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'  
+            $ref: '#/definitions/Error'
     put:
       summary: Update full blog properties. Unsetted parameters will be erased
       parameters:
@@ -313,11 +325,11 @@ paths:
           schema:
             $ref: '#/definitions/new_dc_post'
       responses:
-        200:
+        '200':
           description: array containing the updated post's id
           schema:
             $ref: '#/definitions/Ids'
-        404:
+        '404':
           description: this post does not exists
         default:
           description: Unexpected error
@@ -339,17 +351,17 @@ paths:
           type: string
           required: true
       responses:
-        200:
+        '200':
           description: array containing the deleted post's id
           schema:
             $ref: '#/definitions/Ids'
-        404:
+        '404':
           description: this post does not exists
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /{blog-id}/categories:
+  '/{blog-id}/categories':
     get:
       summary: Get list of available categories
       parameters:
@@ -362,7 +374,7 @@ paths:
           type: string
           required: true
       responses:
-        200:
+        '200':
           description: array containing the categories properties
           schema:
             title: categories
@@ -388,9 +400,8 @@ paths:
           in: body
           schema:
             $ref: '#/definitions/new_category'
-
       responses:
-        200:
+        '200':
           description: array containing the created category id
           schema:
             $ref: '#/definitions/Ids'
@@ -398,8 +409,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-
-  /{blog-id}/categories/{cat-id}:
+  '/{blog-id}/categories/{cat-id}':
     get:
       summary: get one category properties
       parameters:
@@ -416,7 +426,7 @@ paths:
           type: string
           required: true
       responses:
-        200:
+        '200':
           description: array containing the created category properties
           schema:
             $ref: '#/definitions/category'
@@ -440,7 +450,7 @@ paths:
           schema:
             $ref: '#/definitions/category'
       responses:
-        200:
+        '200':
           description: array containing the modified category id
           schema:
             $ref: '#/definitions/Ids'
@@ -448,13 +458,6 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-          
-      
-          
-      
-  
-        
-          
 definitions:
   blog:
     type: object
@@ -469,14 +472,12 @@ definitions:
         type: string
       blog_url:
         type: string
-      description: 
+      blog_desc:
         type: string
-      blog_status:
+      lang:
         type: string
-        enum:
-          - En ligne
-          - Hors ligne
-          - Retiré
+      blog_timezone:
+        type: string
       url_scan:
         type: string
         enum:
@@ -497,7 +498,7 @@ definitions:
         type: string
       url:
         type: string
-      description: 
+      description:
         type: string
       author:
         type: string
@@ -799,7 +800,6 @@ definitions:
         type: integer
       temporary:
         type: boolean
-    
   Error:
     type: object
     properties:

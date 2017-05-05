@@ -9,11 +9,31 @@
   "schemes": [
     "http"
   ],
-  "basePath": "/dotclear/index.php?rest/",
+  "basePath": "/dotclear/index.php?rest",
   "produces": [
     "application/json"
   ],
   "paths": {
+    "/specs": {
+      "get": {
+        "summary": "Get this API SWAGGER documentation",
+        "responses": {
+          "200": {
+            "description": "swagger.json",
+            "schema": {
+              "title": "doc",
+              "type": "string"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/blogs": {
       "get": {
         "summary": "Get list of availables blogs",
@@ -29,10 +49,9 @@
           "200": {
             "description": "array serving blogs properties",
             "schema": {
-              "title": "blogs",
               "type": "array",
               "items": {
-                "$ref": "#/definitions/blog"
+                "type": "string"
               }
             }
           },
@@ -695,16 +714,14 @@
         "blog_url": {
           "type": "string"
         },
-        "description": {
+        "blog_desc": {
           "type": "string"
         },
-        "blog_status": {
-          "type": "string",
-          "enum": [
-            "En ligne",
-            "Hors ligne",
-            "Retiré"
-          ]
+        "lang": {
+          "type": "string"
+        },
+        "blog_timezone": {
+          "type": "string"
         },
         "url_scan": {
           "type": "string",

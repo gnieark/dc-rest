@@ -56,11 +56,11 @@ if(!empty($_POST['resetApiKey'])){
 ?>
 <html>
 <head>
-  <title>Rest API config</title>
+  <title><?php echo __('REST API configuration'); ?></title>
 </head>
 <body>
   <h2>Documentation</h2>
-            <p><a href="<?php echo $core->blog->url."rest/documentation"; ?>">Go to the Swagger documentation</a></p>
+            <p><a href="<?php echo $core->blog->url."rest/documentation" . '">' . __('Documentation and test interface Swagger UI') .'</a></p>'; ?>
   <h2><?php echo __('Your API key');?></h2>
   <?php echo $apiKey-> get_dc_admin_form($core->auth->userID()); ?>
 
@@ -76,10 +76,9 @@ if($core->auth->isSuperAdmin()):
     </p>
     <p>
       <?php echo form::checkbox('open', 1, $openApi); ?>
-      <label class="classic" for="open">&nbsp;<?php echo __('API is open');?></label>
+      <label class="classic" for="open">&nbsp;<?php echo __('API is open without key');?></label>
     </p>
-    <p class="info"><?php echo __("If checked, few methods as GET will be allowed to externals users without API key. 
-    However, they won't be able to request for non public content."); ?></p> 
+    <p class="info"><?php echo __("If checked, few methods as GET will be allowed to externals users without API key. However, they won't be able to request for non public content."); ?></p> 
     <?php echo $core->formNonce(); ?>
     <p>
       <?php echo form::checkbox('sendHeaders', 1, $sendHeaders); ?>

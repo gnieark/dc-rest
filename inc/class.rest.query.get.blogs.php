@@ -5,7 +5,7 @@ class RestQueryGetBlogs extends RestQuery
   public function __construct(){
   
     global $core;
-    $this->blog_id = false; //this method doesn't depend on a bolg_id
+    $this->blog_id = false; //this method doesn't depend on a blog_id
     $this->required_perms = 'none'; //I want user have an account 
     
     if($this->is_allowed() === false){

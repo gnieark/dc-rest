@@ -83,10 +83,21 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "array containing the new blog's identifiant",
+          "201": {
+            "description": "Success, array containing the new blog's identifiant",
             "schema": {
-              "$ref": "#/definitions/Ids"
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "blog_id": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
             }
           },
           "default": {
@@ -117,7 +128,7 @@
         ],
         "responses": {
           "200": {
-            "description": "array containing blog properties. This list of attributes is not exhaustive.",
+            "description": "Core blog properties. use {blog_id}/settings methods for more settings.",
             "schema": {
               "$ref": "#/definitions/blogProperties"
             }
@@ -177,7 +188,7 @@
         }
       },
       "put": {
-        "summary": "Overwrite blog Properties (if a parameter is not set, his value will be erased by de default value)",
+        "summary": "Overwrite blog Properties (if an optional parameter is not set, his value will be erased by the default value)",
         "parameters": [
           {
             "name": "x_dc_key",
@@ -197,7 +208,7 @@
             "description": "This list of parameters is not exhaustive",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/blogProperties"
+              "$ref": "#/definitions/blogPropertiesPut"
             }
           }
         ],
@@ -241,6 +252,40 @@
             "schema": {
               "$ref": "#/definitions/Ids"
             }
+          },
+          "404": {
+            "description": "this blog id does not exists"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog_id}/settings": {
+      "get": {
+        "summary": "Get the about:config",
+        "description": "Get all parameters",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "404": {
             "description": "this blog id does not exists"
@@ -741,240 +786,43 @@
         }
       }
     },
+    "blogPropertiesPut": {
+      "required": [
+        "blog_id",
+        "blog_name",
+        "blog_url",
+        "blog_desc"
+      ],
+      "type": "object",
+      "properties": {
+        "blog_id": {
+          "type": "string"
+        },
+        "blog_name": {
+          "type": "string"
+        },
+        "blog_url": {
+          "type": "string"
+        },
+        "blog_desc": {
+          "type": "string"
+        }
+      }
+    },
     "blogProperties": {
       "type": "object",
       "properties": {
-        "id": {
+        "blog_id": {
           "type": "string"
         },
-        "name": {
+        "blog_name": {
           "type": "string"
         },
-        "url": {
+        "blog_url": {
           "type": "string"
         },
-        "description": {
+        "blog_desc": {
           "type": "string"
-        },
-        "author": {
-          "type": "string"
-        },
-        "allow_comments": {
-          "type": "boolean"
-        },
-        "allow_trackbacks": {
-          "type": "boolean"
-        },
-        "blog_timezone": {
-          "type": "string"
-        },
-        "comment_preview_optional": {
-          "type": "string"
-        },
-        "comments_nofollow": {
-          "type": "boolean"
-        },
-        "comments_pub": {
-          "type": "boolean"
-        },
-        "comments_ttl": {
-          "type": "integer"
-        },
-        "copyright_notice": {
-          "type": "string"
-        },
-        "csp_admin_default": {
-          "type": "string"
-        },
-        "csp_admin_img": {
-          "type": "string"
-        },
-        "csp_admin_on": {
-          "type": "boolean"
-        },
-        "csp_admin_report_only": {
-          "type": "boolean"
-        },
-        "csp_admin_script": {
-          "type": "string"
-        },
-        "csp_admin_style": {
-          "type": "string"
-        },
-        "date_format": {
-          "type": "string"
-        },
-        "date_formats": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "string"
-          }
-        },
-        "editor": {
-          "type": "string"
-        },
-        "enable_html_filter": {
-          "type": "boolean"
-        },
-        "enable_xmlrpc": {
-          "type": "boolean"
-        },
-        "import_feed_ip_regexp": {
-          "type": "string"
-        },
-        "import_feed_no_private_ip": {
-          "type": "boolean"
-        },
-        "import_feed_port_regexp": {
-          "type": "string"
-        },
-        "import_feed_url_control": {
-          "type": "boolean"
-        },
-        "inc_subcats": {
-          "type": "boolean"
-        },
-        "jquery_migrate_mute": {
-          "type": "boolean"
-        },
-        "jquery_version": {
-          "type": "string"
-        },
-        "lang": {
-          "type": "string"
-        },
-        "media_exclusion": {
-          "type": "string"
-        },
-        "media_flash_fallback": {
-          "type": "boolean"
-        },
-        "media_img_default_alignment": {
-          "type": "string"
-        },
-        "media_img_default_legend": {
-          "type": "string"
-        },
-        "media_img_default_link": {
-          "type": "string"
-        },
-        "media_img_default_size": {
-          "type": "string"
-        },
-        "media_img_m_size": {
-          "type": "integer"
-        },
-        "media_img_no_date_alone": {
-          "type": "string"
-        },
-        "media_img_s_size": {
-          "type": "integer"
-        },
-        "media_img_t_size": {
-          "type": "integer"
-        },
-        "media_img_title_pattern": {
-          "type": "string"
-        },
-        "media_img_use_dto_first": {
-          "type": "string"
-        },
-        "media_video_height": {
-          "type": "integer"
-        },
-        "media_video_width": {
-          "type": "integer"
-        },
-        "nb_comment_per_feed": {
-          "type": "integer"
-        },
-        "nb_post_for_home": {
-          "type": "integer"
-        },
-        "nb_post_per_feed": {
-          "type": "integer"
-        },
-        "nb_post_per_page": {
-          "type": "integer"
-        },
-        "no_search": {
-          "type": "boolean"
-        },
-        "note_title_tag": {
-          "type": "string"
-        },
-        "post_url_format": {
-          "type": "string"
-        },
-        "prevents_clickjacking": {
-          "type": "string"
-        },
-        "public_path": {
-          "type": "string"
-        },
-        "public_url": {
-          "type": "string"
-        },
-        "robots_policy": {
-          "type": "string"
-        },
-        "short_feed_items": {
-          "type": "boolean"
-        },
-        "simpleMenu": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "simpleMenu_active": {
-          "type": "boolean"
-        },
-        "store_plugin_url": {
-          "type": "string"
-        },
-        "store_theme_url": {
-          "type": "string"
-        },
-        "theme": {
-          "type": "string"
-        },
-        "themes_path": {
-          "type": "string"
-        },
-        "themes_url": {
-          "type": "string"
-        },
-        "time_format": {
-          "type": "string"
-        },
-        "time_formats": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "tpl_allow_php": {
-          "type": "boolean"
-        },
-        "tpl_use_cache": {
-          "type": "boolean"
-        },
-        "trackbacks_pub": {
-          "type": "boolean"
-        },
-        "trackbacks_ttl": {
-          "type": "integer"
-        },
-        "url_scan": {
-          "type": "string"
-        },
-        "use_smilies": {
-          "type": "boolean"
-        },
-        "wiki_comments": {
-          "type": "boolean"
         }
       }
     },

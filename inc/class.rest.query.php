@@ -1,9 +1,9 @@
 <?php
 
 class RestQuery{
-  public $response_code;
+  protected $response_code;
   public $response_message; //array
-  public $blog_id;
+  protected $blog_id;
   protected $required_perms = 'admin'; //must be changed by the childs class
   /*
     should be:
@@ -22,7 +22,7 @@ class RestQuery{
   public function __construct()
   {
   
-        $this->response_code = RestQuery::get_full_code_header(400);
+        $this->response_code = 400;
         $this->response_message = array(
           "error"  => "Unrecoknized method",
           "code"  => 400
@@ -44,7 +44,7 @@ class RestQuery{
       if(empty(array_diff($fieldsSetted,$fieldsRequired))){
         return true;
       }else{
-        $this->response_code = RestQuery::get_full_code_header(400);
+        $this->response_code = 400;
         $this->response_message = array(
           "error"  => "Only and each of following parameters ".
             implode(", ",$fieldsRequired)." are required",
@@ -56,7 +56,7 @@ class RestQuery{
       //check if all required fields are set
       foreach($fieldsRequired as $key){
         if(!isset($arrayToCheck[$key])){
-          $this->response_code = RestQuery::get_full_code_header(400);
+          $this->response_code = 400;
           $this->response_message = array(
             "error"  => "field ".$key." is needed",
             "code"  => 400
@@ -102,8 +102,6 @@ class RestQuery{
     
     switch($this->required_perms){
       case 'unauth':
-      
-        
         //on verifie quand même que l'API est ouverte
         if((!$core->blog->settings->rest->rest_is_open) && ($core->auth === false)){
           return false;
@@ -112,7 +110,7 @@ class RestQuery{
         }
       
         break;
-      //to do
+        
       case 'none':
         //user must be valid
         if($core->auth === false){
@@ -147,7 +145,10 @@ class RestQuery{
         break;
     }
   }
-  public function get_full_code_header($code){
+  public function get_full_code_header($code=''){
+    if($code == ''){
+      $code = $this->response_code;
+    }
     static $codes = array(
       100 =>"Continue",
       101 =>"Switching Protocols",

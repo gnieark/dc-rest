@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php
+if (!defined('DC_RC_PATH')) { return; }
+?><!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">

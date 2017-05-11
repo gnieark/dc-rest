@@ -23,14 +23,14 @@ class rest extends dcUrlHandlers
         }elseif($args == 'specs'){
           $queryObj = new RestQueryGetSpecs();
           break;
-        }elseif(preg_match('^blogs/(.+)$', $args )){
+        }elseif(preg_match('/^blogs\/(.*)$/', $args )){
+           ///blogs/{blog-id}
           $queryObj = new RestQueryGetBlog($args);
+          break;      
+        }elseif(preg_match('/^(.*)\/settings$/', $args )){
+          $queryObj = new RestQueryGetBlogSettings($args);
           break;
-        
         }
-        
-        ///blogs/{blog-id}
-        
         
         break;
       case "POST":
@@ -40,15 +40,25 @@ class rest extends dcUrlHandlers
       
         break;
       case "PUT":
-      
+        if(preg_match('/^blogs\/(.*)$/', $args )){
+          $queryObj = new ResQueryPutBlogs($args,$body);
+          break;
+        }      
         break;
         
       case "PATCH":
-      
+        if(preg_match('/^blogs\/(.*)$/', $args )){
+          $queryObj = new ResQueryPatchBlogs($args,$body);
+          break;
+        }
+
         break;
         
       case "DELETE":
-      
+        if(preg_match('/^blogs\/(.*)$/', $args )){
+          $queryObj = new ResQueryDeleteBlogs($args,$body);
+          break;
+        }  
         break;
       default:
         $queryObj = new RestQuery();
@@ -101,7 +111,7 @@ class rest extends dcUrlHandlers
       $core->auth = false;
     }
     $r = rest::restFactoryQuery($_SERVER['REQUEST_METHOD'],$args,file_get_contents('php://input'));
-    header($r->response_code);
+    header($r->get_full_code_header());
     echo json_encode($r->response_message);    
     
   }

@@ -75,9 +75,10 @@ class RestQueryPostBlogs extends RestQuery
       $core->callBehavior('adminAfterBlogCreate',$cur,$blog_id,$blog_settings);
       
       //cool
-      $this->response_code = 200;
+      $this->response_code = 201;
       $this->response_message = array(
-        'code'      => 200,
+        'code'      => 201,
+        'id'        => $blog_id
         'message'   => 'Successfully created blog'.$blog_id
       );
 

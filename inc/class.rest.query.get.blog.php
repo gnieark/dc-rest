@@ -12,9 +12,6 @@ class RestQueryGetBlog extends RestQuery
   
   $this->required_perms = 'unauth';
       if($this->is_allowed() === false){
-        //need To be authentified
-        $this->response_code = 403;
-        $this->response_message = array('code' => 403, 'error' => 'This API is not open without KEY');
         return;
       }
     //instance

@@ -6,13 +6,11 @@ class RestQueryGetBlogSettings extends RestQuery
   {
     global $core;
     
-    
-    $this->blog_id = explode("/",$args)[0];
+    $explodedArgs = explode("/",$args);
+    $this->blog_id = $explodedArgs[0];
     //check if user is allowed
     $this->required_perms = 'admin';
     if($this->is_allowed() === false){
-      $this->response_code = 403;
-      $this->response_message = array('code' => 403, 'error' => 'No enough privileges');
       return;
     } 
 
@@ -31,8 +29,26 @@ class RestQueryGetBlogSettings extends RestQuery
           $settings[$ns][$k] = $v;
         }
       }
+      
       $this->response_code = 200;
-      $this->response_message =  $settings;
+      
+      if(isset($explodedArgs[3])){
+        if(isset($settings[$explodedArgs[2]][$explodedArgs[3]])){
+          $this->response_message =  $settings[$explodedArgs[2]][$explodedArgs[3]];
+        }else{
+            $this->response_code = 404;
+            $this->response_message = array('code' => 404, 'error' => 'Namespace or setting not found');     
+        }
+      }elseif(isset($explodedArgs[2])){
+        if(isset($settings[$explodedArgs[2]])){
+            $this->response_message =  $settings[$explodedArgs[2]];
+        }else{
+            $this->response_code = 404;
+            $this->response_message = array('code' => 404, 'error' => 'Namespace found');     
+        }  
+      }else{
+        $this->response_message =  $settings;
+      }
     }catch (Exception $e){
       $this->response_code = 500;
       $this->response_message = array(
@@ -40,9 +56,7 @@ class RestQueryGetBlogSettings extends RestQuery
         'message'   => $e->getMessage()
       );
     }
-    
-     return; 
+    return; 
   }
   
-    
 }

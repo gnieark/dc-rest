@@ -9,14 +9,9 @@ class ResQueryPutBlogs extends RestQuery
     global $core;
     
     $this->blog_id = substr($args,6);
-
-    $this->required_perms = 'admin'; 
-    
+    $this->required_perms = 'admin';    
     //Is allowed?
     if($this->is_allowed() === false){
-      //need To be authentified
-      $this->response_code = 403;
-      $this->response_message = array('code' => 403, 'error' => 'You need to be admin to put a blog');
       return;
     }
     

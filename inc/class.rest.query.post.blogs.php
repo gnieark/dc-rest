@@ -10,9 +10,6 @@ class RestQueryPostBlogs extends RestQuery
     $this->required_perms = 'admin'; //I want user have an account 
     
     if($this->is_allowed() === false){
-      //need To be authentified
-      $this->response_code = 403;
-      $this->response_message = array('code' => 403, 'error' => 'You need to be admin to create a new blog');
       return;
     }
     
@@ -78,7 +75,7 @@ class RestQueryPostBlogs extends RestQuery
       $this->response_code = 201;
       $this->response_message = array(
         'code'      => 201,
-        'id'        => $blog_id
+        'id'        => $blog_id,
         'message'   => 'Successfully created blog'.$blog_id
       );
 

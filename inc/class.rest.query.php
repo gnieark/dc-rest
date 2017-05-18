@@ -22,12 +22,13 @@ class RestQuery{
   public function __construct()
   {
   
-        $this->response_code = 400;
+        $this->response_code = 404;
         $this->response_message = array(
-          "error"  => "Unrecoknized method",
-          "code"  => 400
+          "error"  => "Method not found",
+          "code"  => 404
         );
   }
+
   /**
   * Check if required fields are set
   * $strict => Go on error if a additionnal field is given
@@ -84,7 +85,7 @@ class RestQuery{
     if($ret = json_decode($body,true)){
       return $ret;
     }else{
-      $this->response_code = 301;
+      $this->response_code = 400;
       $this->response_message = array(
         'error' => 'Can\'t parse input JSON',
         'code'  => 400
@@ -99,24 +100,23 @@ class RestQuery{
       $perms = $core->auth->getAllPermissions();
     }
     
-    
+    $is_allowed = false;
     switch($this->required_perms){
+      
       case 'unauth':
         //on verifie quand même que l'API est ouverte
-        if((!$core->blog->settings->rest->rest_is_open) && ($core->auth === false)){
-          return false;
-        }else{
-          return true;
+        if(
+            (($core->blog->settings->rest->rest_is_open) && ($core->auth === false))
+            ||($core->auth !== false)
+        ){
+              $is_allowed = true;
         }
-      
-        break;
         
+        break;      
       case 'none':
         //user must be valid
-        if($core->auth === false){
-          return false;
-        }else{
-          return true;
+        if($core->auth){
+          $is_allowed = true;
         }
         break;
       case 'media_admin':
@@ -134,15 +134,17 @@ class RestQuery{
       case 'usage':
         break;
       case 'admin':
-        if($core->auth === false){
-          return false;
-        }
-        if ($core->auth->isSuperAdmin()){
-          return true;
-        }else{
-          return false;
+        if (($core->auth !== false) && $core->auth->isSuperAdmin()){
+          $is_allowed = true;
         }
         break;
+    }
+    if($is_allowed){
+      return true;
+    }else{
+      $this->response_code = 403;
+      $this->response_message = array('code' => 403, 'error' => 'Unauthorized');
+      return false;
     }
   }
   public function get_full_code_header($code=''){

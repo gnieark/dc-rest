@@ -9,9 +9,6 @@ class RestQueryGetBlogs extends RestQuery
     $this->required_perms = 'none'; //I want user have an account 
     
     if($this->is_allowed() === false){
-      //need To be authentified
-      $this->response_code = 403;
-      $this->response_message = array('code' => 403, 'error' => 'get Blogs methods requires to be authentified');
       return;
     }   
     //list the blogs the user can access

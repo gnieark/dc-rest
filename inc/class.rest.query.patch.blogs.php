@@ -9,14 +9,10 @@ class ResQueryPatchBlogs extends RestQuery
     global $core;
     
     $this->blog_id = substr($args,6);
-
     $this->required_perms = 'admin'; 
     
     //Is allowed?
-    if($this->is_allowed() === false){
-      //need To be authentified
-      $this->response_code = 403;
-      $this->response_message = array('code' => 403, 'error' => 'You need to be admin to patch a blog');
+    if($this->is_allowed() === false){;
       return;
     }
     
@@ -29,7 +25,7 @@ class ResQueryPatchBlogs extends RestQuery
     //is it valid fields?
     if(!$this->check_for_required_fields( $inputArray, array(), 
       array('blog_id','blog_url','blog_name','blog_desc','lang','blog_timezone','url_scan')) ){
-     return; 
+      return;
     }
     
     //does the blog exists?

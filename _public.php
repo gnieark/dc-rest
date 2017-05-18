@@ -18,37 +18,43 @@ class rest extends dcUrlHandlers
     switch($httpMethod){
       case "GET":
         if($args == 'blogs'){
-          $queryObj = new RestQueryGetBlogs();
+          return new RestQueryGetBlogs();
           break;
         }elseif($args == 'specs'){
-          $queryObj = new RestQueryGetSpecs();
+          return new RestQueryGetSpecs();
           break;
         }elseif(preg_match('/^blogs\/(.*)$/', $args )){
            ///blogs/{blog-id}
-          $queryObj = new RestQueryGetBlog($args);
+          return new RestQueryGetBlog($args);
           break;      
         }elseif(preg_match('/^(.*)\/settings$/', $args )){
-          $queryObj = new RestQueryGetBlogSettings($args);
+          return new RestQueryGetBlogSettings($args);
+          break;
+        }elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args )){
+          return new RestQueryGetBlogSettings($args);
           break;
         }
         
         break;
       case "POST":
         if($args == 'blogs'){
-          $queryObj = new RestQueryPostBlogs($body);
+          return new RestQueryPostBlogs($body);
+        }elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args )){
+          return new RestQueryPostBlogSettings($args,$body);
+          break;
         }
       
         break;
       case "PUT":
         if(preg_match('/^blogs\/(.*)$/', $args )){
-          $queryObj = new ResQueryPutBlogs($args,$body);
+          return new ResQueryPutBlogs($args,$body);
           break;
         }      
         break;
         
       case "PATCH":
         if(preg_match('/^blogs\/(.*)$/', $args )){
-          $queryObj = new ResQueryPatchBlogs($args,$body);
+          return new ResQueryPatchBlogs($args,$body);
           break;
         }
 
@@ -56,16 +62,16 @@ class rest extends dcUrlHandlers
         
       case "DELETE":
         if(preg_match('/^blogs\/(.*)$/', $args )){
-          $queryObj = new ResQueryDeleteBlogs($args,$body);
+          return new ResQueryDeleteBlogs($args,$body);
           break;
-        }  
+        }elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args )){
+          return new RestQueryDeleteBlogSettings($args);
+        }
         break;
       default:
-        $queryObj = new RestQuery();
         break;
     }
-    
-    return $queryObj;
+    return new RestQuery(); //will return a 404
   
   }
 

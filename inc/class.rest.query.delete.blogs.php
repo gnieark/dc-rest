@@ -1,7 +1,7 @@
 <?php
 class ResQueryDeleteBlogs extends RestQuery
 {
-//$core->delBlog($blog_id);
+
   public function __construct($args){
   
    global $core;
@@ -13,8 +13,6 @@ class ResQueryDeleteBlogs extends RestQuery
     //Is allowed?
     if($this->is_allowed() === false){
       //need To be authentified
-      $this->response_code = 403;
-      $this->response_message = array('code' => 403, 'error' => 'You need to be admin to patch a blog');
       return;
     }
     
@@ -31,7 +29,7 @@ class ResQueryDeleteBlogs extends RestQuery
       $core->delBlog($this->blog_id);
       $this->response_code = 201;
       $this->response_message = array(
-        'code'      => 200,
+        'code'      => 201,
         'message'   => 'Successfully deleted blog '.$this->blog_id
       );
 
@@ -44,9 +42,5 @@ class ResQueryDeleteBlogs extends RestQuery
         'message'   => $e->getMessage()
       );
     }
-  
-  
   }
-
-
 }

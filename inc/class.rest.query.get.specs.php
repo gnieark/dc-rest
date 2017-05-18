@@ -3,13 +3,9 @@ class RestQueryGetSpecs extends RestQuery
 {
   public function __construct(){
     global $core;
-    $this->response_code = 200;
-    
+    $this->response_code = 200;  
     $this->required_perms = 'unauth'; 
-    
     if($this->is_allowed() === false){
-      $this->response_code = 403;
-      $this->response_message = array('code' => 403, 'error' => 'this method is not open');
       return;
     }
     

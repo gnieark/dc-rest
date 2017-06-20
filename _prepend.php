@@ -15,3 +15,9 @@ $__autoload['ResQueryDeleteBlogs'] = dirname(__FILE__).'/inc/class.rest.query.de
 $__autoload['RestQueryGetBlogSettings'] = dirname(__FILE__).'/inc/class.rest.query.get.blog.settings.php';
 $__autoload['RestQueryPostBlogSettings'] = dirname(__FILE__).'/inc/class.rest.query.post.blog.settings.php';
 $__autoload['RestQueryDeleteBlogSettings'] = dirname(__FILE__).'/inc/class.rest.query.delete.blog.settings.php';
+$__autoload['RestQueryGetPosts'] = dirname(__FILE__).'/inc/class.rest.query.get.posts.php';
+$__autoload['RestQueryGetPost'] = dirname(__FILE__).'/inc/class.rest.query.get.post.php';
+$__autoload['RestQueryPostPost'] = dirname(__FILE__).'/inc/class.rest.query.post.post.php';
+$__autoload['RestQueryPostCategories'] = dirname(__FILE__).'/inc/class.rest.query.post.categories.php';
+$__autoload['RestQueryPostMetas'] = dirname(__FILE__).'/inc/class.rest.query.post.metas.php';
+

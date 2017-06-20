@@ -1,8 +1,8 @@
 <?php
 
-$api_key = '1zhoGXv9PA0lvPNG81GUlCNfqT45gVuV'; //super admin api_key, change it by your
-$api_url = 'http://dotclear.localhost/dotclear/index.php?rest'; //my local dev platform
-
+$api_key = 'tn0GHPOxbK3hbJAygRPihJHqPKvhC2vw'; //super admin api_key, change it by your
+$api_url = 'http://dotclear.localhost/rest'; //my local dev platform, change it by your
+//testUser key DVsmYPmW6jvfk4kgak1krvbxcl1nGXMJ
 
 function check_json_content($content,$aKeyToCheck){
   
@@ -313,13 +313,23 @@ $allTests = array(
    
    //delete the settings
     array(
-    'title'                 => 'DELETE /%blog_id%/settings/test/test2 without key error',
+    'title'                 => 'DELETE /%blog_id%/settings/test/test2 with key error',
     'url'                   =>  $api_url.'/%blog_id%/settings/test/test2',
     'method'                => 'DELETE',
     'expectedResponseCode'  => '403',
     'expectedKeyOnResponse' => 'code',
     'body'                  => '',
     'x_dc_key'              =>  'lkjmlhkjb:b:kjb',
+    'saveAs'                => ''
+   ),
+   array(
+    'title'                 => 'DELETE /%blog_id%/settings/test/tsdfLJKt2 with name error',
+    'url'                   =>  $api_url.'/%blog_id%/settings/test/tsdfLJKt2',
+    'method'                => 'DELETE',
+    'expectedResponseCode'  => '404',
+    'expectedKeyOnResponse' => 'code',
+    'body'                  => '',
+    'x_dc_key'              =>  $api_key,
     'saveAs'                => ''
    ),
    
@@ -334,7 +344,181 @@ $allTests = array(
     'saveAs'                => ''
    ),
    
+   //create a POST
    
+   array(
+    'title' => 'Create a post /%blog_id%/post',
+    'url' => $api_url.'/%blog_id%/post',
+    'method'  => 'POST',
+    'expectedResponseCode'  => '200',
+    'expectedKeyOnResponse' => 'id',
+    'body'  => json_encode(array(
+        "post_title" => "New Post",
+        "post_format"=> "wiki",
+        "post_content"=> "!!!Pouette \n hey",
+        "post_content_xhtml"=> "string",
+        "post_status"=> "Pending",
+        "post_tags" => array('plip','plap')
+    )),
+    'x_dc_key'              =>  $api_key,
+    'saveAs'                => 'post_id'
+    
+   ),
+   //plusieurs billets d'un coup
+   array(
+    'title' => 'Create many post /%blog_id%/post',
+    'url' => $api_url.'/%blog_id%/post',
+    'method'  => 'POST',
+    'expectedResponseCode'  => '200',
+    'expectedKeyOnResponse' => 'message',
+    'body'  => json_encode(array(
+      array(
+        "post_title" => "New Post2",
+        "post_format"=> "wiki",
+        "post_content"=> "!!!Pouette \n hey",
+        "post_content_xhtml"=> "string",
+        "post_status"=> "Pending",
+      ),
+      array(
+        "post_title" => "New Post3",
+        "post_format"=> "wiki",
+        "post_content"=> "!!!Pouette \n\n!!hey\n heu...",
+        "post_content_xhtml"=> "string",
+        "post_status"=> "Pending",
+      )
+    )),
+    'x_dc_key'              =>  $api_key,
+    'saveAs'                => ''
+    
+   ),
+   
+   //create a post with a new category
+  array(
+    'title' => 'Create a post /%blog_id%/post with a new cat',
+    'url' => $api_url.'/%blog_id%/post',
+    'method'  => 'POST',
+    'expectedResponseCode'  => '200',
+    'expectedKeyOnResponse' => 'message',
+    'body'  => json_encode(array(
+        "post_title" => "New Post4",
+        "post_format"=> "wiki",
+        "post_content"=> "!!!Pouette \n hey",
+        "post_content_xhtml"=> "string",
+        "post_status"=> "Pending",
+        "new_cat_id"=> "TestingCat",
+    )),
+    'x_dc_key'              =>  $api_key,
+    'saveAs'                => ''
+   ),  
+   
+      //create a post with an existing category
+  array(
+    'title' => 'Create a post /%blog_id%/post with an existing cat',
+    'url' => $api_url.'/%blog_id%/post',
+    'method'  => 'POST',
+    'expectedResponseCode'  => '200',
+    'expectedKeyOnResponse' => 'message',
+    'body'  => json_encode(array(
+        "post_title" => "New Post5",
+        "post_format"=> "wiki",
+        "post_content"=> "!!!Pouette \n hey",
+        "post_content_xhtml"=> "string",
+        "post_status"=> "Pending",
+        "cat_id"=> 1,
+    )),
+    'x_dc_key'              =>  $api_key,
+    'saveAs'                => ''
+   ),
+   
+   //create a post with a new sub category
+  array(
+    'title' => 'Create a post /%blog_id%/post',
+    'url' => $api_url.'/%blog_id%/post',
+    'method'  => 'POST',
+    'expectedResponseCode'  => '200',
+    'expectedKeyOnResponse' => 'message',
+    'body'  => json_encode(array(
+        "post_title" => "New Post6",
+        "post_format"=> "wiki",
+        "post_content"=> "!!!Pouette \n hey",
+        "post_content_xhtml"=> "string",
+        "post_status"=> "Pending",
+        "new_cat_parent" => 1,
+        "new_cat_id"=> "Testing sub Cat",
+    )),
+    'x_dc_key'              =>  $api_key,
+    'saveAs'                => ''
+   ),
+   
+   array(
+    'title' => 'Create a post /%blog_id%/post with all parameters',
+    'url' => $api_url.'/%blog_id%/post',
+    'method'  => 'POST',
+    'expectedResponseCode'  => '200',
+    'expectedKeyOnResponse' => 'message',
+    'body'  => json_encode(array(
+        "post_title" => "New Post6",
+        "post_format"=> "wiki",
+        "post_content"=> "!!!Pouette \n hey",
+        "post_content_xhtml"=> "string",
+        "post_status"=> "Pending",
+        "new_cat_parent" => 1,
+        "new_cat_id"=> "Testing sub Cat 2",
+        "post_dt" => '2013-04-19 05:06:07',
+        "post_password" => 'toto',
+        "post_url"  => "newPost",
+        "post_lang" => "de",
+        "post_excerpt"  => "blahblah",
+        "post_notes"  => "heu...",
+        "post_selected" => true,
+        "post_open_comment" => true,
+        "post_open_tb"  => true,
+    )),
+    'x_dc_key'              =>  $api_key,
+    'saveAs'                => ''
+   ),
+   
+   
+   //Créer une méta (un tag)
+   array(
+    "title"     => 'Create a  post meta /%blog_id%/metas',
+    'url'       => $api_url.'/%blog_id%/metas',
+    'method'    => 'POST',
+    'expectedResponseCode'  => '201',
+    'expectedKeyOnResponse' => 'id',
+    'body'  => '{ "meta_id": "lol", "meta_type": "tag", "post_id": %post_id% }',
+    'x_dc_key'              =>  $api_key,
+    'saveAs'                => ''
+   ),
+   /*
+     "post_title": "string",
+  "post_format": "string",
+  "post_content": "string",
+  "post_content_xhtml": "string",
+  "post_status": "Pending",
+  "cat_id": 0,
+  "new_cat_id": "string",
+  "new_cat_parent_id": 0,
+  "new_cat_desc": "string",
+  "new_cat_url": "string",
+  "post_dt": "string",
+  "post_password": "string",
+  "post_url": "string",
+  "post_lang": "string",
+  "post_excerpt": "string",
+  "post_excerpt_xhtml": "string",
+  "post_notes": "string",
+  "post_selected": true,
+  "post_open_comment": true,
+  "post_open_tb": true,
+  "post_words": [
+    null
+  ]
+  */
+   
+   
+   /*
+   ,
   //remove blog test
     array(
       'title'                 => 'Blogs /blogs/%blog_id%  with good api_key',
@@ -347,19 +531,21 @@ $allTests = array(
       'saveAs'                => ''
 
     ),
+    */
 );
 
 $saveIds = array();
 foreach($allTests as $oneTest){
 
   //replaces
-  
   foreach($oneTest as $key => $value){
     foreach($saveIds as $find => $replace){
-      $oneTest[$key] = str_replace('%'.$find.'%', $replace, $value);
+      $value = $oneTest[$key] = str_replace('%'.$find.'%', $replace, (string)$value);
     }
+    
   }
-
+  
+  
   echo "\nTesting ".$oneTest['title']." ".$oneTest['url']." method ". $oneTest['method'];
   $t = test(
               $oneTest['url'],

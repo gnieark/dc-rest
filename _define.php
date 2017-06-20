@@ -15,7 +15,7 @@ $this->registerModule(
   /* Name */          "rest",
   /* Description*/    "A JSON/REST API for Dotclear",
   /* Author */        "Gnieark (hope some others contributors)",
-  /* Version */        '0.0.1',
+  /* Version */        '0.0.2',
   array(
     'permissions' =>  'usage,contentadmin',
     'type'    =>    'plugin',

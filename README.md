@@ -10,6 +10,13 @@ Real time code repository is https://bitbucket.org/gnieark/dc-rest-api
 
 Make a zip of this repository and install it on your Dotclear Blog.
 
+# Known bugs
+
+If your dotclear use the query_strings URLS and there are some filters in query...
+So URL is somthing like index.php?rest/{something}/{someting}?filter1=value1 
+The integrated Swaggers API fails to generate the correct URL. However API Works.
+
+
 # License
 
 Dotclear rest/json plugin.

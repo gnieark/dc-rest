@@ -7,18 +7,19 @@ class RestQuery{
   protected $required_perms = 'admin'; //must be changed by the childs class
   /*
     should be:
-      'admin'
-      'usage'
-      'publish'
-      'delete'
-      'contentadmin'
-      'categories'
-      'media'
-      'media_admin'
-      'none' //must be have an account (without any rights)
+      'admin' administrateur
+      'usage' gérer ses propres billets et commentaires
+      'publish' publier des billets et des commentaires
+      'delete'  supprimer des billets et des commentaires
+      'contentadmin' gérer tous les billets et commentaires
+      'categories'   gérer les catégories
+      'media' gérer ses propres médias
+      'media_admin' gérer tous les médias
+      'none' //must have an account (without any rights)
       'unauth' //Open to the world
     */
     
+  
   public function __construct()
   {
   
@@ -68,6 +69,7 @@ class RestQuery{
       //check if a field is not in required and in fieldsOptionals
       foreach($fieldsSetted as $keyToTest){
         if((!in_array($keyToTest,$fieldsRequired)) && (!in_array($keyToTest,$fieldsOptionals))){
+          $this->response_code = 400;
           $this->response_message = array(
             "error"  => "Unwanted field '".$keyToTest."'",
             "code"  => 400
@@ -147,6 +149,51 @@ class RestQuery{
       return false;
     }
   }
+  
+  /*
+  * Quand l'API permet à la fois une structure
+  * { 
+  *    key1 : value1,
+  *    key2 : value2
+  *  }
+  *
+  * et une structure avec plusieurs enregistrements
+  * [
+  *   { 
+  *     key1 : value1.1,
+  *     key2 : value2.1
+  *   },
+  *   { 
+  *     key1 : value1.2,
+  *     key2 : value2.2
+  *   }
+  *]
+  *
+  * Cette function permet de tester quelle structure a un array, et retourne un array sous la deuxième
+  * structure
+  *
+  * IN: $arr L'array à tester
+  * $keyToTest: string Un nom de clef obligatoire qui servira à tester le type de structrure
+  */
+  
+  public function arrayOfObjetsOrNot($arr,$keyToTest){
+  
+    try{
+      if(isset($arr[$keyToTest])){
+        return array($arr);
+      }elseif(isset($arr[0][$keyToTest])){
+        return $arr;
+      }
+    }catch (Exception $e){
+      //parfois ça déconne
+      if(isset($arr[0][$keyToTest])){
+        return $arr;
+      }
+    }
+    return false;
+  }
+  
+  
   public function get_full_code_header($code=''){
     if($code == ''){
       $code = $this->response_code;

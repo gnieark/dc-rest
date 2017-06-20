@@ -17,33 +17,33 @@ class rest extends dcUrlHandlers
     //définir la methode API (pas HTML) appelée
     switch($httpMethod){
       case "GET":
-        if($args == 'blogs'){
+        if($args == 'blogs')
           return new RestQueryGetBlogs();
-          break;
-        }elseif($args == 'specs'){
+        elseif($args == 'specs')
           return new RestQueryGetSpecs();
-          break;
-        }elseif(preg_match('/^blogs\/(.*)$/', $args )){
-           ///blogs/{blog-id}
+        elseif(preg_match('/^blogs\/(.*)$/', $args ))
           return new RestQueryGetBlog($args);
-          break;      
-        }elseif(preg_match('/^(.*)\/settings$/', $args )){
+        elseif(preg_match('/^(.*)\/settings$/', $args ))
           return new RestQueryGetBlogSettings($args);
-          break;
-        }elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args )){
+        elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args ))
           return new RestQueryGetBlogSettings($args);
-          break;
-        }
-        
+        elseif(preg_match('/^(.*)\/posts$/', $args ))
+          return new RestQueryGetPosts($args);
+        elseif(preg_match('/^(.*)\/post\/(.*)$/', $args ))
+          return new RestQueryGetPost($args);
+          
         break;
       case "POST":
-        if($args == 'blogs'){
+        if($args == 'blogs')
           return new RestQueryPostBlogs($body);
-        }elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args )){
+        elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args ))
           return new RestQueryPostBlogSettings($args,$body);
-          break;
-        }
-      
+        elseif(preg_match('/^(.*)\/post$/', $args ))
+          return new RestQueryPostPost($args,$body);
+        elseif(preg_match('/^(.*)\/categories$/', $args )) 
+          return new RestQueryPostCategories($args,$body);
+        elseif(preg_match('/^(.*)\/metas$/', $args ))
+          return new RestQueryPostMetas($args,$body);
         break;
       case "PUT":
         if(preg_match('/^blogs\/(.*)$/', $args )){

@@ -224,8 +224,8 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     post:
-      summary: Create a new namespace and or a new setting'
-      description: "Let body empty if you just want to create a namespace without setting."
+      summary: Create or edit a new namespace and or a new setting'
+      description: "Let body empty if you just want to create a namespace without setting. Note that if the setting already exists, it will be erased. So, PUT and PATCH methods are useless."
       parameters:
         - name: x_dc_key
           in: header
@@ -295,20 +295,59 @@ paths:
           in: path
           type: string
           required: true
-        - name: filters
+        - name: limit-start
           in: query
-          description: sql like filters
-          type: array
-          items:
-            type: string
           required: false
-        - name: fields
+          type: integer
+        - name: limit-count
           in: query
-          type: array
-          items:
-            type: string
+          type: integer
           required: false
-          description: 'Fields you want to get. If unset, fields are post_id, post_url, post_status, post_title, post_date'
+        - name: cat_id
+          in: query
+          type: string
+          required: false
+        - name: post_status
+          type: string
+          in: query
+          required: false
+        - name: password
+          type: string
+          in: query
+          required: false
+        - name: post_selected
+          type: boolean
+          in: query
+          required: false
+        - name: post_open_comment
+          type: boolean
+          in: query
+          required: false
+        - name: post_open_tb
+          type: boolean
+          in: query
+          required: false
+        - name: post_month
+          type: string
+          in: query
+          required: false
+        - name: post_year
+          type: string
+          in: query
+          required: false
+        - name: post_lang
+          type: string
+          in: query
+          required: false
+        - name: post_format
+          type: string
+          in: query
+          required: false
+        - name: sortby
+          type: string
+          in: query
+          required: false
+          description: If many, separate them by a comma
       responses:
         '200':
           description: list of posts
@@ -321,6 +360,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  '/{blog-id}/post':
     post:
       summary: Create a new post
       parameters:
@@ -334,7 +374,7 @@ paths:
           required: true
         - name: properties
           in: body
-          description: Some non required fields you don't define will be set (default value) by the API
+          description: Some non required fields you don't define will be set (default value) by the API. You can post many posts once by putting them on an array like [{'post_title':'blah',...},{'post_title':'bluh',...}]
           schema:
             $ref: '#/definitions/new_dc_post'
       responses:
@@ -346,7 +386,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  '/{blog-id}/posts/{post-id}':
+  '/{blog-id}/post/{post-id}':
     get:
       summary: Get a post entry
       parameters:
@@ -362,13 +402,6 @@ paths:
           in: path
           type: string
           required: true
-        - name: filters
-          in: query
-          description: sql like filters
-          type: array
-          items:
-            type: string
-          required: false
         - name: fields
           in: query
           type: array
@@ -386,7 +419,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     patch:
-      summary: Update part of a post entry's properties
+      summary: Not yet developed Update part of a post entry's properties
       parameters:
         - name: x_dc_key
           in: header
@@ -416,7 +449,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     put:
-      summary: Update full blog properties. Unsetted parameters will be erased
+      summary: Not yet developed Update full blog properties. Unsetted parameters will be erased
       parameters:
         - name: x_dc_key
           in: header
@@ -446,7 +479,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     delete:
-      summary: Delete the post
+      summary: Not yet developed Delete the post
       parameters:
         - name: x_dc_key
           in: header
@@ -471,9 +504,68 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  '/{blog-id}/metas':
+    post:
+      summary: Create a new Postr meta
+      parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: false
+        - name: blog-id
+          in: path
+          type: string
+          required: true
+        - name: properties
+          in: body
+          schema:
+            $ref: '#/definitions/new_meta'    
+      responses:
+        '200':
+          description: New meta id
+          schema:
+            title: categories
+            type: array
+            items:
+              $ref: '#/definitions/category'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  '/{blog-id}/{post-id}/metas':
+    get:
+      summary: get metas for a post
+      parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: false
+        - name: blog-id
+          in: path
+          type: string
+          required: true
+        - name: post-id
+          in: path
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: New meta id
+          schema:
+            title: categories
+            type: array
+            items:
+              $ref: '#/definitions/metas'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+          
+      
+      
   '/{blog-id}/categories':
     get:
-      summary: Get list of available categories
+      summary: Not yet developed Get list of available categories
       parameters:
         - name: x_dc_key
           in: header
@@ -521,7 +613,7 @@ paths:
             $ref: '#/definitions/Error'
   '/{blog-id}/categories/{cat-id}':
     get:
-      summary: get one category properties
+      summary: Not yet developed get one category properties
       parameters:
         - name: x_dc_key
           in: header
@@ -545,7 +637,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     patch:
-      summary: Update some attributes
+      summary: Not yet developed Update some attributes
       parameters:
         - name: blog-id
           in: path
@@ -633,7 +725,19 @@ definitions:
         type: string
       blog_desc:
         type: string
-        
+  new_meta:
+    required:
+      - meta_id
+      - meta_type
+      - post_id
+    type: object
+    properties:
+      meta_id:
+        type: string
+      meta_type:
+        type: string
+      post_id:
+        type: integer
   blogProperties:
     type: object
     properties:
@@ -648,45 +752,22 @@ definitions:
   new_dc_post:
     type: object
     required:
+      - post_format
+      - post_status
       - post_content
       - post_title
     properties:
-      cat_id:
-        type: string
-      post_dt:
-        type: string
-      post_tz:
-        type: string
-      post_creadt:
-        type: string
-      post_upddt:
-        type: string
-      post_password:
-        type: string
-      post_type:
+      post_title:
         type: string
       post_format:
         type: string
-      post_url:
-        type: string
-      post_lang:
-        type: string
-      post_title:
-        type: string
-      post_excerpt:
-        type: string
-      post_excerpt_xhtml:
-        type: string
+        description: generally 'xhtml' or 'wiki'. If you put another value, not managed by Dotclear or a plugin, Fill in the post_content_xhtml field.
       post_content:
         type: string
+        description: The content on WhatYouWant format
       post_content_xhtml:
         type: string
-      post_notes:
-        type: string
-      post_meta:
-        type: string
-      post_words:
-        type: string
+        description: If post_format is wiki or xhtml and not set, It will be generated from post_content
       post_status:
         type: string
         enum:
@@ -694,59 +775,64 @@ definitions:
           - Scheduled
           - Unpublished
           - Published
+      cat_id:
+        type: integer
+      new_cat_id:
+        type: string
+        description: If creating a new category, this is the only required cat_ field. If given cat_id must not be given
+      new_cat_parent_id:
+        type: integer
+        description: Only if new_cat_id is given
+      new_cat_desc:
+        type: string
+        description: the new category description.
+      new_cat_url:
+        type: string
+        description: the new category url 
+      post_dt:
+        type: string
+        description: \'YY-MM-dd hh:mm:ss\' If not set, Current dateTime will be used.
+      post_password:
+        type: string
+        description: Don\'t set that value if your new post won\'t  be protected
+      post_url:
+        type: string
+        description: If not set, will be created using the date and the post_titlke
+      post_lang:
+        type: string
+        description: If not set, User lang will be used
+      post_excerpt:
+        type: string
+      post_excerpt_xhtml:
+        type: string
+        description: If post_format is wiki or xhtml, It will be generated from post_excerpt
+      post_notes:
+        type: string
       post_selected:
         type: boolean
-      post_position:
-        type: string
       post_open_comment:
         type: boolean
       post_open_tb:
         type: boolean
+      post_tags:
+        type: array
+        description: post tags
   dc_post:
     type: object
     properties:
       post_id:
         type: string
-      blog_id:
-        type: string
-      user_id:
-        type: string
-      cat_id:
-        type: string
-      post_dt:
-        type: string
-      post_tz:
-        type: string
-      post_creadt:
-        type: string
-      post_upddt:
-        type: string
-      post_password:
-        type: string
-      post_type:
+      post_title:
         type: string
       post_format:
         type: string
-      post_url:
-        type: string
-      post_lang:
-        type: string
-      post_title:
-        type: string
-      post_excerpt:
-        type: string
-      post_excerpt_xhtml:
-        type: string
+        description: generally 'xhtml' or 'wiki'. If you put another value, not managed by Dotclear or a plugin, Fill in the post_content_xhtml field.
       post_content:
         type: string
+        description: The content on WhatYouWant format
       post_content_xhtml:
         type: string
-      post_notes:
-        type: string
-      post_meta:
-        type: string
-      post_words:
-        type: string
+        description: If post_format is wiki or xhtml and not set, It will be generated from post_content
       post_status:
         type: string
         enum:
@@ -754,20 +840,63 @@ definitions:
           - Scheduled
           - Unpublished
           - Published
+      cat_id:
+        type: integer
+      new_cat_id:
+        type: string
+        description: If creating a new category, this is the only required cat_ field. If given cat_id must not be given
+      new_cat_parent_id:
+        type: integer
+        description: Only if new_cat_id is given
+      new_cat_desc:
+        type: string
+        description: the new category description.
+      new_cat_url:
+        type: string
+        description: the new category url 
+      post_dt:
+        type: string
+        description: \'YY-MM-dd hh:mm:ss\' If not set, Current dateTime will be used.
+      post_password:
+        type: string
+        description: Don\'t set that value if your new post won\'t  be protected
+      post_url:
+        type: string
+        description: If not set, will be created using the date and the post_titlke
+      post_lang:
+        type: string
+        description: If not set, User lang will be used
+      post_excerpt:
+        type: string
+      post_excerpt_xhtml:
+        type: string
+        description: If post_format is wiki or xhtml, It will be generated from post_excerpt
+      post_notes:
+        type: string
       post_selected:
         type: boolean
-      post_position:
-        type: string
       post_open_comment:
         type: boolean
       post_open_tb:
         type: boolean
+      post_tags:
+        type: array
+        description: post tags
       nb_comment:
         type: integer
       nb_trackback:
         type: integer
       post_firstpub:
         type: string
+      metas:
+        type: array
+        items:
+          type: object      
+  metas:
+    type: array
+    items:
+      type: object
+          
   category:
     type: object
     properties:
@@ -780,6 +909,8 @@ definitions:
       cat_desc:
         type: string
       cat_position:
+        type: integer
+      cat_parent_id:
         type: integer
       temporary:
         type: boolean
@@ -794,6 +925,8 @@ definitions:
         type: string
       cat_desc:
         type: string
+      cat_parent_id:
+        type: integer
       cat_position:
         type: integer
       temporary:

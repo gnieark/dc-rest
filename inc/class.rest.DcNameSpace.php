@@ -1,5 +1,5 @@
 <?php
-class restDcNameSpace extends dcSettings
+class restDcNameSpace extends dcNamespace
 {
   //this function is private on the parent class
   public function settingExists($id,$global=false)

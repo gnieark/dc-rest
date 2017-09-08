@@ -1,7 +1,7 @@
 <?php
 class RestQueryGetPosts extends RestQuery
 {
-//curl -X GET "http://dotclear.localhost/dotclear/index.php?rest/default/posts" -H  "accept: application/json" -H  "x_dc_key: 1zhoGXv9PA0lvPNG81GUlCNfqT45gVuV"
+
   public function __construct($args)
   {
   
@@ -17,6 +17,12 @@ class RestQueryGetPosts extends RestQuery
       $unauth = true;
     }
     $core->blog = new dcBlog($core, $this->blog_id);
+    if(!$core->blog->id){
+      //Le blog n'existe pas
+      $this->response_code = 404;
+      $this->response_message = array('code' => 404, 'error' => 'Resource '.$blog_id.' not found');
+      return;      
+    }
     $blog_settings = new dcSettings($core,$this->blog_id);
     
     if($this->is_allowed() === false){

@@ -73,6 +73,11 @@ class RestQueryPostBlogSettings extends RestQuery
       $unauth = true;
     }
     $core->blog = new dcBlog($core, $this->blog_id);
+    if(!$core->blog->id){
+      //Le blog n'existe pas
+      $this->is404('Resource '.$blog_id.' not found');
+      return;      
+    }
     $blog_settings = new dcSettings($core,$this->blog_id);
     
     

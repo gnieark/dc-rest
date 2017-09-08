@@ -8,7 +8,11 @@ Real time code repository is https://bitbucket.org/gnieark/dc-rest-api
 
 # Install:
 
-Make a zip of this repository and install it on your Dotclear Blog.
+Make a zip of this repository, rename it "rest.zip" and install it on your Dotclear Blog via the admin interface.
+
+Or 
+
+ hg clone https://bitbucket.org/gnieark/dc-rest-api /path/to/dotclear/plugins/rest
 
 # Known bugs
 

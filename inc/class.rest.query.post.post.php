@@ -11,6 +11,12 @@ class RestQueryPostPost extends RestQuery{
       $unauth = true;
     }
     $core->blog = new dcBlog($core, $this->blog_id);
+    if(!$core->blog->id){
+      //Le blog n'existe pas
+      $this->response_code = 404;
+      $this->response_message = array('code' => 404, 'error' => 'Resource '.$blog_id.' not found');
+      return;      
+    }
     $blog_settings = new dcSettings($core,$this->blog_id);
     
     if($this->is_allowed() === false){
@@ -38,7 +44,7 @@ class RestQueryPostPost extends RestQuery{
       if(!$this->check_for_required_fields( 
         $p,
         array('post_title','post_format','post_content','post_status'), //required fields
-        array('cat_id','new_cat_id','new_cat_parent','post_dt','post_password',
+        array('cat_id','new_cat_title','new_cat_parent_id','new_cat_position','post_dt','post_password',
           'post_lang','post_excerpt','post_excerpt_xhtml','post_content_xhtml',
           'post_notes','post_selected','post_open_comment','post_open_tb','post_url','post_tags') //facultatives fields
       )){      
@@ -51,17 +57,26 @@ class RestQueryPostPost extends RestQuery{
     foreach($allPosts as $p){
     
       //gestion de la categorie
-      if(isset($p['new_cat_id'])){
+      if(isset($p['new_cat_title'])){
         $params = array();
-        $params['cat_title'] = $p['new_cat_id'];
+        $params['cat_title'] = $p['new_cat_title'];
         if(isset($p['new_cat_parent_id']))
           $params['cat_parent_id'] = $p['new_cat_parent_id'];
+        else
+          $params['cat_parent_id'] = null;
+        if(isset($p['new_cat_position']))
+          $params['cat_position'] = $p['new_cat_position'];
+        else
+          $params['cat_position'] = null;
         if(isset($p['new_cat_url']))
           $params['cat_url'] = $p['new_cat_url'];
         if(isset($p['new_cat_desc']))
           $params['cat_desc'] = $p['new_cat_desc'];
-          
-        $cat_id = RestQueryPostCategories::createCategory($params);
+        
+        $cats = new RestCategories($core);
+        
+        $cat_id = $cats->addCategory($params);
+
         
         if($cat_id === false){
           $this->response_message = 400;

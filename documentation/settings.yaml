@@ -1,0 +1,150 @@
+swagger: '2.0'
+info:
+  title: Dotclear API
+  description: Manage your(s) blogs with this API
+  version: 0.0.2
+host: dotclear.localhost
+schemes:
+  - http
+basePath: /dotclear/index.php?rest
+produces:
+  - application/json
+paths:
+
+  '/{blog_id}/settings':
+    get:
+      summary: 'Get the about:config'
+      description: Get all parameters
+      parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
+        - name: blog_id
+          in: path
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: this blog id does not exists
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  '/{blog_id}/settings/{name_space}':
+    get:
+      summary: Get the settings inside the name-space
+      description: same
+      parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
+        - name: blog_id
+          in: path
+          type: string
+          required: true
+        - name: name_space
+          in: path
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: this blog id does not exists
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create or edit a new namespace and or a new setting'
+      description: 'Let body empty if you just want to create a namespace without setting. Note that if the setting already exists, it will be erased. So, PUT and PATCH methods are useless.'
+      parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
+        - name: blog_id
+          in: path
+          type: string
+          required: true
+        - name: name_space
+          in: path
+          type: string
+          required: true
+        - name: setting
+          description: 'Can be empty, Can pass many settings. [{"id":"string","type":"string","value":"string","value_change":"string Optional","global":"bool optional"},{"id2":...}]'
+          in: body
+          schema:
+            $ref: '#/definitions/settings'
+      responses:
+        '201':
+          description: OK
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  '/{blog_id}/settings/{name_space}/{setting_id}':
+    get:
+      summary: Get value and type for one setting'
+      description: ''
+      parameters:
+        - name: x_dc_key
+          in: header
+          type: string
+          required: true
+        - name: blog_id
+          in: path
+          type: string
+          required: true
+        - name: name_space
+          in: path
+          type: string
+          required: true
+        - name: setting_id
+          in: path
+          type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OneSetting'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+definitions:
+ 
+  OneSetting:
+    type: object
+    properties:
+      ns:
+        type: string
+      value:
+        type: string
+      type:
+        type: string
+      label:
+        type: string
+      global:
+        type: boolean
+  settings:
+    type: array
+    items:
+      type: object
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

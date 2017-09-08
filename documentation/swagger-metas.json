@@ -1,0 +1,360 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Dotclear API",
+    "description": "Manage your(s) blogs with this API",
+    "version": "0.0.2"
+  },
+  "host": "dotclear.localhost",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/dotclear/index.php?rest",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/{blog-id}/metas": {
+      "post": {
+        "summary": "Create a new Postr meta",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "properties",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/new_meta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New meta id",
+            "schema": {
+              "title": "categories",
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "get  metas",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post_id",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "meta_type",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "meta_id",
+            "in": "query",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "metas",
+            "schema": {
+              "title": "Metas",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/meta"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/{post-id}/metas": {
+      "get": {
+        "summary": "get metas for a post",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Metas properties",
+            "schema": {
+              "title": "categories",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/meta"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete all metas for a given post",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "succes messqge",
+            "schema": {
+              "title": "success message",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/metas"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/{post-id}/meta/{meta-id}": {
+      "delete": {
+        "summary": "Delete a meta for a given POST",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "meta-id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmqtion",
+            "schema": {
+              "title": "categories",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/metas"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Delete the meta with the given id and recreate one",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "meta-id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "meta",
+            "in": "body",
+            "description": "This list of parameters is not exhaustive",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/new_meta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmqtion",
+            "schema": {
+              "title": "categories",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/metas"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "new_meta": {
+      "required": [
+        "meta_id",
+        "meta_type",
+        "post_id"
+      ],
+      "type": "object",
+      "properties": {
+        "meta_id": {
+          "type": "string"
+        },
+        "meta_type": {
+          "type": "string"
+        },
+        "post_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "metas": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "meta_id": {
+          "type": "string"
+        },
+        "meta_type": {
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

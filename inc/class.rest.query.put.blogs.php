@@ -28,6 +28,12 @@ class ResQueryPutBlogs extends RestQuery
     
     //does the blog exists?
     $core->blog = new dcBlog($core, $this->blog_id);
+    if(!$core->blog->id){
+      //Le blog n'existe pas
+      $this->response_code = 404;
+      $this->response_message = array('code' => 404, 'error' => 'Resource '.$blog_id.' not found');
+      return;      
+    }
     $blog_settings = new dcSettings($core,$this->blog_id);
     
     if(!$core->blog->id){

@@ -43,10 +43,7 @@ class RestQueryGetPost extends RestQuery
       $this -> response_message = $postArr;
       $this -> response_code = 200;
   
-  
-    
+      
   
   }
-  
-
 }

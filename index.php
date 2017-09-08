@@ -59,11 +59,41 @@ if(!empty($_POST['resetApiKey'])){
   <title><?php echo __('REST API configuration'); ?></title>
 </head>
 <body>
-  <h2>Documentation</h2>
-            <p><a href="<?php echo $core->blog->url."rest/documentation" . '">' . __('Documentation and test interface Swagger UI') .'</a></p>'; ?>
+
   <h2><?php echo __('Your API key');?></h2>
   <?php echo $apiKey-> get_dc_admin_form($core->auth->userID()); ?>
-
+  
+  
+  <h2>Documentation</h2>
+    <ul>
+      <li><a href="<?php echo $core->blog->url."rest/documentation" . '" target="_blank" >' . __('Full documentation') .'</a></p>'; ?></li>
+    </ul>
+    
+    <h3><?php echo __('System methods'); ?> </h3>
+    <ul>
+      <li><a href="<?php echo $core->blog->url."rest/documentation/blogs" . '" target="_blank" >' . __('Search Create Read Update Replace').' blogs</a></p>'; ?></li>
+      <li><a href="<?php echo $core->blog->url."rest/documentation/settings" . '" target="_blank" >' .  __('Search Create Read Update Replace').' settings</a></p>'; ?></li>
+      <li><a href="<?php echo $core->blog->url."rest/documentation/users" . '" target="_blank" >' .  __('Search Create Read Update Replace').' users</a></p>'; ?></li>     <li><a href="<?php echo $core->blog->url."rest/documentation/plugins" . '" target="_blank" >' .  __('Search Create Read Update Replace').' plugins</a></p>'; ?></li>
+      
+    </ul>
+    <h3><?php echo __('Content management methods'); ?> </h3>
+    <ul>
+     <li><a href="<?php echo $core->blog->url."rest/documentation/posts" . '" target="_blank" >' .  __('Search Create Read Update Replace').' Posts</a></p>'; ?></li>
+        <li><a href="<?php echo $core->blog->url."rest/documentation/metas" . '" target="_blank" >' .  __('Search Create Read Update Replace').' Metas</a></p>'; ?></li>
+        <li><a href="<?php echo $core->blog->url."rest/documentation/categories" . '" target="_blank" >' .  __('Search Create Read Update Replace').' Categories </a></p>'; ?></li>
+        <li><a href="<?php echo $core->blog->url."rest/documentation/comments" . '" target="_blank" >' .  __('Search Create Read Update Replace').' '.__('Comments').'</a></p>'; ?></li>
+        
+    </ul>
+    <h3><?php echo __('Public files methods'); ?> </h3>
+      <ul>
+        <li><a href="<?php echo $core->blog->url."rest/documentation/files" . '" target="_blank" >' .  __('Search Create Read Update Replace').' '.__('files').'</a></p>'; ?></li>
+      </ul>
+    <h3><?php echo __('This API'); ?></h3>
+    <ul>
+        <li><a href="<?php echo $core->blog->url."rest/documentation/api" . '" target="_blank" >' .  __('Methods to get documentation and extend this API').'</a></p>'; ?></li>
+      </ul>
+    </ul>
+  
 <?php 
 //Seulement si administrateur:
 if($core->auth->isSuperAdmin()): 

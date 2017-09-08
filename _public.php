@@ -19,10 +19,16 @@ class rest extends dcUrlHandlers
       case "GET":
         if($args == 'blogs')
           return new RestQueryGetBlogs();
-        elseif($args == 'specs')
-          return new RestQueryGetSpecs();
+        elseif( $args == "specs")
+          return new RestQueryGetSpecs($args);
+        elseif(preg_match('/^specs\/(.*)$/', $args ))
+          return new RestQueryGetSpecs($args);
         elseif(preg_match('/^blogs\/(.*)$/', $args ))
           return new RestQueryGetBlog($args);
+        elseif($args == "documentation")
+          return new RestDocumentation($args);
+        elseif(preg_match('/^documentation\/(.*)$/', $args ))  
+          return new RestDocumentation($args);
         elseif(preg_match('/^(.*)\/settings$/', $args ))
           return new RestQueryGetBlogSettings($args);
         elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args ))
@@ -31,6 +37,19 @@ class rest extends dcUrlHandlers
           return new RestQueryGetPosts($args);
         elseif(preg_match('/^(.*)\/post\/(.*)$/', $args ))
           return new RestQueryGetPost($args);
+        elseif(preg_match('/^(.*)\/metas$/', $args ))
+          return new RestQueryGetMetas($args); 
+        elseif(preg_match('/^(.*)\/categories$/', $args ))
+          return new RestQueryGetCategories($args); 
+        elseif(preg_match('/^(.*)\/categories\/(.*)$/', $args ))
+          return new RestQueryGetCategories($args);
+        elseif(preg_match('/^(.*)\/metas\/(.*)$/', $args ))
+          return new RestQueryGetPostMetas($args);
+        elseif(preg_match('/^(.*)\/comments\/(.*)$/', $args ))
+          return new RestQueryGetComments($args);
+        elseif(preg_match('/^(.*)\/comments$/', $args ))
+          return new RestQueryGetComments($args);
+          
           
         break;
       case "POST":
@@ -53,20 +72,30 @@ class rest extends dcUrlHandlers
         break;
         
       case "PATCH":
-        if(preg_match('/^blogs\/(.*)$/', $args )){
+        if(preg_match('/^blogs\/(.*)$/', $args ))
           return new ResQueryPatchBlogs($args,$body);
-          break;
-        }
-
+        elseif(preg_match('/^(.*)\/(.*)\/meta\/(.*)$/', $args ))
+          return new ResQueryPatchMeta($args,$body);
+        elseif(preg_match('/^(.*)\/categories\/(.*)$/', $args ))
+          return new RestQueryPatchCategories($args,$body);
         break;
         
       case "DELETE":
-        if(preg_match('/^blogs\/(.*)$/', $args )){
+        if(preg_match('/^blogs\/(.*)$/', $args ))
           return new ResQueryDeleteBlogs($args,$body);
-          break;
-        }elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args )){
+        elseif(preg_match('/^(.*)\/settings\/(.*)$/', $args ))
           return new RestQueryDeleteBlogSettings($args);
-        }
+        elseif(preg_match('/^(.*)\/(.*)\/metas$/', $args ))
+          return new RestQueryDeletePostMeta($args);
+        elseif(preg_match('/^(.*)\/(.*)\/meta\/(.*)$/', $args ))
+          return new RestQueryDeletePostMeta($args);
+        elseif(preg_match('/^(.*)\/categories\/(.*)$/', $args ))
+          return new RestQueryDeleteCategories($args,$body);
+         elseif(preg_match('/^(.*)\/comments\/(.*)$/', $args )) 
+          return new RestQueryDeleteComments($args,$body);
+        elseif(preg_match('/^(.*)\/comments$/', $args )) 
+          return new RestQueryDeleteComments($args,$body);
+        
         break;
       default:
         break;
@@ -75,6 +104,9 @@ class rest extends dcUrlHandlers
   
   }
 
+  /*
+  * Serve the Query response With the headers and the body
+  */
   public static function getResponse($args)
   {
     global $core;
@@ -90,15 +122,7 @@ class rest extends dcUrlHandlers
       header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE'); 
       header('Access-Control-Allow-Headers: Content-Type, authorization, x_dc_key');
     }
-    
-    
-    //exception pour la documentation
-    if($args == "documentation"){
-                        include (dirname(__FILE__).'/documentation/swagger-ui-dist/index.php');
-                        return;
-    }
-    
-    header('Content-Type: application/json');
+
     
     //user authentification (facultative at this step)
     $apiKey = rest::get_api_key_sended();
@@ -106,6 +130,7 @@ class rest extends dcUrlHandlers
     if($apiKey){
       $core->auth = new restAuth($core);
       if($core->auth->checkUser('','',$apiKey) === false){
+        header('Content-Type: application/json');
         header(RestQuery::get_full_code_header(403));
         echo json_encode(array(
           "error" => "Wrong API Key",
@@ -118,13 +143,18 @@ class rest extends dcUrlHandlers
     }
     $r = rest::restFactoryQuery($_SERVER['REQUEST_METHOD'],$args,file_get_contents('php://input'));
     header($r->get_full_code_header());
-    echo json_encode($r->response_message);    
+    if(is_array($r->response_message)){
+      header('Content-Type: application/json');
+      echo json_encode($r->response_message);
+    }else{
+      echo $r->response_message;
+    }
     
   }
   
   private function get_api_key_sended()
   {
-    //to do: test it on nginx
+    //to do: test it with nginx
     $headers = apache_request_headers();
     if(isset($headers['x_dc_key'])){
       return $headers['x_dc_key'];

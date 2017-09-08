@@ -42,3 +42,24 @@ msgstr "Créer une clef pour"
 
 msgid "Copy and paste it, You will cannot see it again."
 msgstr "Copiez collez la. Cette clef ne pourra pas vous être refournie."
+
+msgid "Full documentation"
+msgstr "Documentation complète"
+
+msgid "System methods"
+msgstr "Méthodes système"
+
+msgid "Content management methods"
+msgstr "Méthodes de gestion du contenu"
+
+msgid "Public files methods"
+msgstr "Gestion de la médiathèque"
+
+msgid "Search Create Read Update Replace"
+msgstr "Chercher Créer Lire Modifier Supprimer"
+
+msgid "This API"
+msgstr "Cette API"
+
+msgid "Methods to get documentation and extend this API"
+msgstr "Méthodes pour obtenir la documentation et etendre cette API"

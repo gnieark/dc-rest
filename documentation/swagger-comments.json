@@ -1,0 +1,508 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Dotclear API Comments methods",
+    "description": "Search Create Update Delete comments",
+    "version": "0.0.2"
+  },
+  "host": "dotclear.localhost",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/dotclear/index.php?rest",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/{blog-id}/comments": {
+      "get": {
+        "summary": "Get list of comments",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limits",
+            "in": "query",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the categories properties",
+            "schema": {
+              "title": "list of comments",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/comments"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a list of comments",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "list",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/list"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the categories properties",
+            "schema": {
+              "title": "list of comments",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/comments"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/{post-id}/comments": {
+      "get": {
+        "summary": "Get list of comments for the given post",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limits",
+            "in": "query",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the categories properties",
+            "schema": {
+              "title": "list of comments",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/comments"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new comment",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "post-id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "properties",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/new_comment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the created category id",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/{blog-id}/comments/{comment-id}": {
+      "get": {
+        "summary": "Get one comment properties",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "comment-id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the created category properties",
+            "schema": {
+              "$ref": "#/definitions/comments"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update some attributes",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "comment-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "cmooent",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/patch_comment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing the modified category id",
+            "schema": {
+              "$ref": "#/definitions/Ids"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a comment",
+        "parameters": [
+          {
+            "name": "x_dc_key",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "blog-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "comment-id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "array containing Sucess message",
+            "schema": {
+              "$ref": "#/definitions/success"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Ids": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "New blog id"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "string"
+        }
+      }
+    },
+    "list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "patch_comment": {
+      "type": "object",
+      "properties": {
+        "comment_dt": {
+          "type": "string"
+        },
+        "comment_tz": {
+          "type": "string"
+        },
+        "comment_upddt": {
+          "type": "string"
+        },
+        "comment_author": {
+          "type": "string"
+        },
+        "comment_email": {
+          "type": "string"
+        },
+        "comment_site": {
+          "type": "string"
+        },
+        "comment_content": {
+          "type": "string"
+        },
+        "comment_words": {
+          "type": "string"
+        },
+        "comment_ip": {
+          "type": "string"
+        },
+        "comment_status": {
+          "type": "integer"
+        },
+        "comment_spam_status": {
+          "type": "integer"
+        },
+        "comment_spam_filter": {
+          "type": "integer"
+        },
+        "comment_trackback": {
+          "type": "integer"
+        }
+      }
+    },
+    "new_comment": {
+      "type": "object",
+      "properties": {
+        "comment_dt": {
+          "type": "string"
+        },
+        "comment_tz": {
+          "type": "string"
+        },
+        "comment_upddt": {
+          "type": "string"
+        },
+        "comment_author": {
+          "type": "string"
+        },
+        "comment_email": {
+          "type": "string"
+        },
+        "comment_site": {
+          "type": "string"
+        },
+        "comment_content": {
+          "type": "string"
+        },
+        "comment_words": {
+          "type": "string"
+        },
+        "comment_ip": {
+          "type": "string"
+        },
+        "comment_status": {
+          "type": "integer"
+        },
+        "comment_spam_status": {
+          "type": "integer"
+        },
+        "comment_spam_filter": {
+          "type": "integer"
+        },
+        "comment_trackback": {
+          "type": "integer"
+        }
+      }
+    },
+    "comments": {
+      "type": "object",
+      "properties": {
+        "comment_id": {
+          "type": "integer"
+        },
+        "post_id": {
+          "type": "integer"
+        },
+        "comment_dt": {
+          "type": "string"
+        },
+        "comment_tz": {
+          "type": "string"
+        },
+        "comment_upddt": {
+          "type": "string"
+        },
+        "comment_author": {
+          "type": "string"
+        },
+        "comment_email": {
+          "type": "string"
+        },
+        "comment_site": {
+          "type": "string"
+        },
+        "comment_content": {
+          "type": "string"
+        },
+        "comment_words": {
+          "type": "string"
+        },
+        "comment_ip": {
+          "type": "string"
+        },
+        "comment_status": {
+          "type": "integer"
+        },
+        "comment_spam_status": {
+          "type": "integer"
+        },
+        "comment_spam_filter": {
+          "type": "integer"
+        },
+        "comment_trackback": {
+          "type": "integer"
+        }
+      }
+    },
+    "success": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

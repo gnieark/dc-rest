@@ -2,50 +2,7 @@
 class RestQueryPostCategories extends RestQuery
 {
 
-  /**
-  * IN $params array with keys
-  * OUT integer, the new category id
-  */
-  public function createCategory($params){
-    global $core;
-    if(!isset($params['cat_title'])){  
-      return false;
-    }
-    
-    try
-    {
-      $cur = $core->con->openCursor($core->prefix.'category');
-      $cur->cat_title =  $params['cat_title'];
-      if (isset($params['cat_desc'])) {
-        $cur->cat_desc = $params['cat_desc'];
-      }
 
-      if (isset($params['cat_url'])) {
-        $cur->cat_url = $params['cat_url'];
-      }else{
-        $cur->cat_url = '';
-      }
-      
-      if(isset($params['cat_parent_id'])){
-        $cat_parent_id = $params['cat_parent_id'];
-      }else{
-        $cat_parent_id = null;
-      }
-        
-      # --BEHAVIOR-- adminBeforeCategoryCreate
-      $core->callBehavior('adminBeforeCategoryCreate',$cur);
-
-      $id = $core->blog->addCategory($cur,(integer)$cat_parent_id);
-
-      # --BEHAVIOR-- adminAfterCategoryCreate
-      $core->callBehavior('adminAfterCategoryCreate',$cur,$id);
-      
-      return $id;
-    }catch (Exception $e) {
-      return false;
-    }
-  
-  }
   public function __construct($args,$body){
   
     global $core;
@@ -58,6 +15,12 @@ class RestQueryPostCategories extends RestQuery
       $unauth = true;
     }
     $core->blog = new dcBlog($core, $this->blog_id);
+    if(!$core->blog->id){
+      //Le blog n'existe pas
+      $this->response_code = 404;
+      $this->response_message = array('code' => 404, 'error' => 'Resource '.$blog_id.' not found');
+      return;      
+    }
     $blog_settings = new dcSettings($core,$this->blog_id);
     
     if($this->is_allowed() === false){
@@ -76,14 +39,27 @@ class RestQueryPostCategories extends RestQuery
     }
     
     if(!$this->check_for_required_fields( 
-    $clientQueryArr,
-    array('cat_title'), //required fields
-    array('cat_url','cat_desc','cat_parent_id','cat_position','temporary') //facultatives fields
+      $clientQueryArr,
+      array('cat_title'), //required fields
+      array('cat_url','cat_desc','cat_parent_id','cat_position','temporary') //facultatives fields
     )){ 
       return;
     }
-
-    $id = $this->createCategory($clientQueryArr);
+    
+    //$id = $this->createCategory($clientQueryArr);
+    $cats = new RestCategories($core);
+    if($cats->cat_titleExists($clientQueryArr['cat_title'])){
+      $this->response_code = 409;
+      $this->response_message = array(
+        'error' => 409,
+        'message' => 'a cat with the same cat_title allready exists.'
+      );
+      return;
+    }
+    
+    $id = $cats->addCategory($clientQueryArr);
+    
+    
     
     if($id === false){
       $this->response_code = 500;

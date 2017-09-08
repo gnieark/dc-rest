@@ -23,13 +23,22 @@ class RestQuery{
   public function __construct()
   {
   
-        $this->response_code = 404;
-        $this->response_message = array(
-          "error"  => "Method not found",
-          "code"  => 404
-        );
+    $this->response_code = 404;
+    $this->response_message = array(
+      "error"  => "Method not found",
+      "code"  => 404
+    );
   }
 
+  protected function is404($customMessage = '')
+  {
+    $this->response_code = 404;
+    if (empty($customMessage))
+      $this->response_message = array('code' => 404, 'error' => 'Resource  not found');
+    else
+      $this->response_message = array('code' => 404, 'error'  => $customMessage);
+  }
+  
   /**
   * Check if required fields are set
   * $strict => Go on error if a additionnal field is given
@@ -83,6 +92,43 @@ class RestQuery{
   
   
   }
+  /*
+  * IN $RawFilters string urlencoded corresponding to $_GET['filters']
+  * IN $permittedKeys array listing the keys the filter can Used
+  * OUT array ('KeyName' => 'expectedValue')
+  */
+  protected function getFilters($rawFilters,$permittedKeys)
+  {
+ 
+      
+    $subject = urldecode($rawFilters);
+    $matchExpr = '/(?<=^|\\s)([^=\\s]+)="((?:[^\\\\"]|\\\\.)*)"/';
+    $replaceExpr = '/\\\\./';
+
+    $replaceCallback = function($match) {
+      switch ($match[0][1]) {
+        case 'r': return "\r";
+        case 'n': return "\n";
+        default: return $match[0][1];
+      }
+    };
+
+    preg_match_all($matchExpr, $subject, $matches);
+
+    $result = array();
+    foreach ($matches[1] as $i => $key) {
+      if(!in_array($key,$permittedKeys)){
+        $this->response_code = 400;
+        $this->response_message = array("code" => 400,
+                                        "message" => "UnAllowed filter ".$key);
+        return false;
+      }
+      $result[$key] = preg_replace_callback($replaceExpr, $replaceCallback, $matches[2][$i]);
+    }  
+    
+    return $result;
+  }
+  
   protected function body_to_array($body){
     if($ret = json_decode($body,true)){
       return $ret;
@@ -261,5 +307,20 @@ class RestQuery{
     }else{
       return "HTTP/1.0 ".$code." Something wrong happened";
     }
+  }
+  
+  function rs_to_array($rs){
+
+    $arr = array();
+
+    while($rs->fetch()){
+      $r = array();
+      $columns =  $rs->columns();
+      foreach($columns as $key){
+          $r[$key] = $rs->$key;
+      }  
+      $arr[] = $r;
+    }
+    return $arr;  
   }
 }

@@ -1,0 +1,180 @@
+blogs:
+  description: SCRUD (search create update delete Blogs)
+  swaggerDoc: blogs.yaml
+  entryPoints:
+    getBlogs:
+      title: Get blogs
+      method: GET
+      pattern: /^blogs($|/(.*)$)/
+      class: blogs
+      function: getBlogs
+      params:
+        - args
+specs:
+  description: Return this API swagger definitions.
+  swaggerDoc: specs.yaml
+  entryPoints:
+    getSpecs: get the swagger specification
+    method: GET
+
+
+
+/*
+array("method"    =>"GET",
+"URLmatch"  => "/^blogs$/",
+"object"    => "RestQueryGetBlogs",
+"arguments" => array(),
+"limit_results"    => true,
+"title"     => "list blogs"
+),
+array("method"    => "GET",
+"URLmatch"  => "/^specs($|\/(.*)$)/",
+"object"    => "RestQueryGetSpecs",
+"arguments" => array("args"),
+),
+array("method"    => "GET",
+"URLmatch"  => '/^blogs\/(.*)$/',
+"object"    => "RestQueryGetBlog",
+"arguments" => array("args"),
+),
+array("method"    => "GET",
+"URLmatch"  => '/^documentation($|\/)/',
+"object"    => "RestDocumentation",
+"arguments" =>  array("args")
+
+),
+array("method"    => "GET",
+"URLmatch"  => '/^((.*)\/settings|(.*)\/settings\/(.*))$/',
+"object"    => "RestQueryGetBlogSettings",
+"arguments" => array("args"),
+"limit_results"    => true,
+"title"     => "list settings"
+),
+array("method"    => "GET",
+"URLmatch"  => '/^(.*)\/posts$/',
+"object"    => "RestQueryGetPosts",
+"arguments" => array("args"),
+"limit_results"    => true,
+"title"     => "list posts"
+
+),
+array("method"    => "GET",
+"URLmatch"  => '/^(.*)\/post\/(.*)$/',
+"object"    => "RestQueryGetPosts",
+"arguments" => array("args")
+),
+array("method"    => "GET",
+"URLmatch"  => '/^(.*)\/metas$/',
+"object"    => "RestQueryGetMetas",
+"arguments" => array("args"),
+"limit_results"    => true,
+"title"     => "list metas"
+),
+array("method"    => "GET",
+"URLmatch"  => '/^(.*)\/categories($|\/(.*)$)/',
+"object"    => "RestQueryGetCategories",
+"arguments" => array("args"),
+"limit_results"    => true,
+"title"     => "list categories"
+),
+array("method"    => "GET",
+"URLmatch"  => '/^(.*)\/comments($|\/(.*)$)/',
+"object"    => "RestQueryGetComments",
+"arguments" => array("args")
+),
+array("method"    => "POST",
+"URLmatch"  => '/^blogs$/',
+"object"    => "RestQueryPostBlogs",
+"arguments" => array("body"),
+),
+array("method"    => "POST",
+"URLmatch"  => '/^(.*)\/settings\/(.*)$/',
+"object"    => "RestQueryPostBlogSettings",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "POST",
+"URLmatch"  => '/^(.*)\/post$/',
+"object"    => "RestQueryPostPost",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "POST",
+"URLmatch"  => '/^(.*)\/categories$/',
+"object"    => "RestQueryPostCategories",
+"arguments" => array("args","body"),
+),
+array(
+"method"    => "POST",
+"URLmatch"  => '/^(.*)\/metas$/',
+"object"    => "RestQueryPostMetas",
+"arguments" => array("args", "body")
+),
+array(
+"method"    => "POST",
+"URLmatch"  => '/^(.*)\/(.*)\/comments$/',
+"object"    => "RestQueryPostComments",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "PUT",
+"URLmatch"  => '/^blogs\/(.*)$/',
+"object"    => "ResQueryPutBlogs",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "PATCH",
+"URLmatch"  => '/^blogs\/(.*)$/',
+"object"    => "ResQueryPatchBlogs",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "PATCH",
+"URLmatch"  => '/^(.*)\/(.*)\/meta\/(.*)$/',
+"object"    => "ResQueryPatchMeta",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "PATCH",
+"URLmatch"  => '/^(.*)\/categories\/(.*)$/',
+"object"    => "RestQueryPatchCategories",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "DELETE",
+"URLmatch"  => '/^blogs\/(.*)$/',
+"object"    => "ResQueryDeleteBlogs",
+"arguments" =>  array("args", "body")
+),
+array(
+"method"    => "DELETE",
+"URLmatch"  => '/^(.*)\/settings\/(.*)$/',
+"object"    => "RestQueryDeleteBlogSettings",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "DELETE",
+"URLmatch"  => '/^(.*)\/(.*)\/metas$/',
+"object"    => "RestQueryDeletePostMeta",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "DELETE",
+"URLmatch"  => '/^(.*)\/(.*)\/meta\/(.*)$/',
+"object"    => "RestQueryDeletePostMeta",
+"arguments" => array("args")
+),
+array(
+"method"    => "DELETE",
+"URLmatch"  => '/^(.*)\/categories\/(.*)$/',
+"object"    => "RestQueryDeleteCategories",
+"arguments" => array("args","body")
+),
+array(
+"method"    => "DELETE",
+"URLmatch"  => '/(^(.*)\/comments\/(.*)|^(.*)\/comments)$/',
+"object"    => "RestQueryDeleteComments",
+"arguments" => array("args","body"),
+),
+
+);
